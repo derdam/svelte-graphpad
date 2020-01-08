@@ -1,6 +1,6 @@
 # svelte graphpad
 
-An interactive graph editor wriiten in Svelte with Vis.js
+An interactive graph editor writen in Svelte with Vis.js
 Based on svelte template below.
 
 ---
