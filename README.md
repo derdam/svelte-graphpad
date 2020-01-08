@@ -1,4 +1,7 @@
-*Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# svelte graphpad
+
+An interactive graph editor wriiten in Svelte with Vis.js
+Based on svelte template below.
 
 ---
 
