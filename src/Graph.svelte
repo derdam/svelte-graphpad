@@ -94,9 +94,9 @@
      nodes.remove(selection.nodes);
    }
 
-   function addNewNode() {
+   function addNewNode(attr) {
      if (nodesSelected <= 1) {
-      var newNode = nodes.add({label: 'New\nNode'});
+      var newNode = nodes.add({label: 'New\nNode', ...attr});
       if (nodesSelected===1) {
         //alert("foo. "+JSON.stringify(node1.id);
         var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: 'New edge'});
@@ -106,6 +106,10 @@
         network.selectNodes(newNode);
      }
     };
+
+    function addNewDocumentNode() {
+      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'});
+    }
 
     // Event handlers 
 
@@ -148,6 +152,7 @@
 
 {#if canAddNode}
   <button on:click={addNewNode}>New node</button>
+   <button on:click={addNewDocumentNode}>New document node</button>
 {/if}
 
 {#if canDeleteNodes}
