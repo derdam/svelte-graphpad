@@ -25,6 +25,8 @@
         updateNode(node)
     }
 
+      $: { updateNode(node); }
+
 </script>
 
 <p>Node editor Document worrks</p>

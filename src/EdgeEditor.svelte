@@ -8,15 +8,17 @@
 
     //  $: { updateNode(node); }
 
-    function updateNode(node) {
+    function updateEdge(node) {
     dispatch('message', {
             edge: edge
         });
     };
 
     function sayHello() {
-        updateNode(edge)
+        updateEdge(edge)
     }
+
+      $: { updateEdge(edge); }
 
 </script>
 

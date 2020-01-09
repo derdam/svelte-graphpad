@@ -6,7 +6,7 @@
 
     const dispatch = createEventDispatcher();
 
-    //  $: { updateNode(node); }
+    $: { updateNode(node); }
 
     function updateNode(node) {
     dispatch('message', {

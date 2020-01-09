@@ -94,12 +94,12 @@
      nodes.remove(selection.nodes);
    }
 
-   function addNewNode(attr) {
+   function addNewNode(attr, edgeattr) {
      if (nodesSelected <= 1) {
       var newNode = nodes.add({label: 'New\nNode', ...attr});
       if (nodesSelected===1) {
         //alert("foo. "+JSON.stringify(node1.id);
-        var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: 'New edge'});
+        var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: 'New edge', ...edgeattr});
          selection.edges = []; 
       }
         selection.nodes = newNode;
@@ -108,7 +108,8 @@
     };
 
     function addNewDocumentNode() {
-      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'});
+      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'},
+      {});
     }
 
     // Event handlers 
