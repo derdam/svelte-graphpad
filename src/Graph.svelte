@@ -30,6 +30,8 @@
     }
   }
 
+  let inh;
+  let inw;
 
 	 var nodes = new vis.DataSet([
     {id: 1, label: 'Node 1', shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'},
@@ -54,6 +56,10 @@
   };
 
   var options = {
+   
+   autoResize: true,
+            height: '100%',
+            width: '100%',
     interaction: { multiselect: true},
     nodes:{
      shapeProperties: {
@@ -74,12 +80,14 @@
         selection = params;
     });
 
+   // network.on("stabilized", function(x) {network.fit(); });
+  
   });
   
 
    function addNewEdge() {
     if (nodesSelected === 2) {
-        edges.add({from: node1[0].id, to: node2[0].id, label: 'New edge'});
+        edges.add({from: node1[0].id, to: node2[0].id, label: ''});
     }
    }
 
@@ -99,7 +107,7 @@
       var newNode = nodes.add({label: 'New\nNode', ...attr});
       if (nodesSelected===1) {
         //alert("foo. "+JSON.stringify(node1.id);
-        var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: 'New edge', ...edgeattr});
+        var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: '', ...edgeattr});
          selection.edges = []; 
       }
         selection.nodes = newNode;
@@ -122,22 +130,32 @@
       edges.update(event.detail.edge);
     }
 
+    function fit() {
+      network.fit();
+
+    }
+
 </script>
 
 <style>
 .editZone {
     position:absolute;
     width:100%;
-    height:192px;
+   
+    z-index:99; 
+    opacity:0.8; 
   }
 
 	.graph {
     position: absolute;
-    top: 200px;
-		width:100%;
-		height:600px;
-	}
+    top: 0px;
+    left:-2px;
+	  width: 101%;
+    height:400px;
+  
+  }
 </style>
+
 
 <!-- link rel='stylesheet' href='/test.css' -->
 
@@ -150,7 +168,14 @@
 <p>Selected edge 1  {JSON.stringify(edge1)}</p>
 -->
 
+
+
+<svelte:window bind:innerHeight={inh} innerWidth={inw}/>
+
+
+
 <div class="l0 editZone">
+<button on:click={fit}>Center</button>
 {#if canEditEdge}
   <EdgeEditor edge={edge1[0]} on:message={edgeUpdated}></EdgeEditor>
 {/if}
@@ -178,5 +203,5 @@
 {/if}
 </div>
 
-<div id ="mynet" class="graph">
+<div id ="mynet" class="graph" style="height:{inh+1}px">
 </div>	

@@ -29,7 +29,7 @@
 
 </script>
 
-<p>Node editor Document worrks</p>
+
 
 {#if node}
     <p>Node.id : {node.id}</p>
@@ -43,7 +43,7 @@
 		bind:files
 		on:change={changed}
 />
-    <button on:click={sayHello}>Submit</button>
+   <!-- <button on:click={sayHello}>Submit</button> -->
 
    
 {/if}
