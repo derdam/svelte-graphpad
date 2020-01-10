@@ -16,6 +16,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "sirv": "^0.4.2",
     "sirv-cli": "^0.4.4",
     "vis-network": "^6.5.0"
   }

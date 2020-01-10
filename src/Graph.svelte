@@ -125,7 +125,15 @@
 </script>
 
 <style>
+.editZone {
+    position:absolute;
+    width:100%;
+    height:192px;
+  }
+
 	.graph {
+    position: absolute;
+    top: 200px;
 		width:100%;
 		height:600px;
 	}
@@ -142,6 +150,7 @@
 <p>Selected edge 1  {JSON.stringify(edge1)}</p>
 -->
 
+<div class="l0 editZone">
 {#if canEditEdge}
   <EdgeEditor edge={edge1[0]} on:message={edgeUpdated}></EdgeEditor>
 {/if}
@@ -167,6 +176,7 @@
 {#if canDeleteEdge}
   <button on:click={deleteEdge}>Delete Edge</button>
 {/if}
+</div>
 
 <div id ="mynet" class="graph">
 </div>	
