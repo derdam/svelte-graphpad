@@ -64,6 +64,9 @@ var app = (function () {
             input.value = value;
         }
     }
+    function set_style(node, key, value, important) {
+        node.style.setProperty(key, value, important ? 'important' : '');
+    }
     function custom_event(type, detail) {
         const e = document.createEvent('CustomEvent');
         e.initCustomEvent(type, false, false, detail);
@@ -405,8 +408,6 @@ var app = (function () {
     	let t4;
     	let t5_value = /*node*/ ctx[0].label + "";
     	let t5;
-    	let t6;
-    	let button;
     	let dispose;
 
     	const block = {
@@ -420,19 +421,11 @@ var app = (function () {
     			p1 = element("p");
     			t4 = text("New label: ");
     			t5 = text(t5_value);
-    			t6 = space();
-    			button = element("button");
-    			button.textContent = "Submit";
-    			add_location(p0, file, 25, 4, 375);
+    			add_location(p0, file, 25, 4, 351);
     			attr_dev(input, "type", "text");
-    			add_location(input, file, 26, 4, 406);
-    			add_location(p1, file, 27, 4, 456);
-    			add_location(button, file, 28, 4, 491);
-
-    			dispose = [
-    				listen_dev(input, "input", /*input_input_handler*/ ctx[4]),
-    				listen_dev(button, "click", /*sayHello*/ ctx[1], false, false, false)
-    			];
+    			add_location(input, file, 26, 4, 382);
+    			add_location(p1, file, 27, 4, 432);
+    			dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[4]);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p0, anchor);
@@ -445,8 +438,6 @@ var app = (function () {
     			insert_dev(target, p1, anchor);
     			append_dev(p1, t4);
     			append_dev(p1, t5);
-    			insert_dev(target, t6, anchor);
-    			insert_dev(target, button, anchor);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*node*/ 1 && t1_value !== (t1_value = /*node*/ ctx[0].id + "")) set_data_dev(t1, t1_value);
@@ -463,9 +454,7 @@ var app = (function () {
     			if (detaching) detach_dev(input);
     			if (detaching) detach_dev(t3);
     			if (detaching) detach_dev(p1);
-    			if (detaching) detach_dev(t6);
-    			if (detaching) detach_dev(button);
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -481,26 +470,18 @@ var app = (function () {
     }
 
     function create_fragment(ctx) {
-    	let p;
-    	let t1;
     	let if_block_anchor;
     	let if_block = /*node*/ ctx[0] && create_if_block(ctx);
 
     	const block = {
     		c: function create() {
-    			p = element("p");
-    			p.textContent = "Node editor works";
-    			t1 = space();
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
-    			add_location(p, file, 22, 0, 334);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			insert_dev(target, t1, anchor);
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
@@ -521,8 +502,6 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t1);
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
     		}
@@ -584,7 +563,7 @@ var app = (function () {
     		}
     	};
 
-    	return [node, sayHello, dispatch, updateNode, input_input_handler];
+    	return [node, dispatch, updateNode, sayHello, input_input_handler];
     }
 
     class NodeEditor extends SvelteComponentDev {
@@ -632,8 +611,6 @@ var app = (function () {
     	let t4;
     	let t5_value = /*edge*/ ctx[0].label + "";
     	let t5;
-    	let t6;
-    	let button;
     	let dispose;
 
     	const block = {
@@ -647,19 +624,11 @@ var app = (function () {
     			p1 = element("p");
     			t4 = text("New label: ");
     			t5 = text(t5_value);
-    			t6 = space();
-    			button = element("button");
-    			button.textContent = "Submit";
-    			add_location(p0, file$1, 27, 4, 411);
+    			add_location(p0, file$1, 27, 4, 387);
     			attr_dev(input, "type", "text");
-    			add_location(input, file$1, 28, 4, 442);
-    			add_location(p1, file$1, 29, 4, 492);
-    			add_location(button, file$1, 30, 4, 527);
-
-    			dispose = [
-    				listen_dev(input, "input", /*input_input_handler*/ ctx[4]),
-    				listen_dev(button, "click", /*sayHello*/ ctx[1], false, false, false)
-    			];
+    			add_location(input, file$1, 28, 4, 418);
+    			add_location(p1, file$1, 29, 4, 468);
+    			dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[4]);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p0, anchor);
@@ -672,8 +641,6 @@ var app = (function () {
     			insert_dev(target, p1, anchor);
     			append_dev(p1, t4);
     			append_dev(p1, t5);
-    			insert_dev(target, t6, anchor);
-    			insert_dev(target, button, anchor);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*edge*/ 1 && t1_value !== (t1_value = /*edge*/ ctx[0].id + "")) set_data_dev(t1, t1_value);
@@ -690,9 +657,7 @@ var app = (function () {
     			if (detaching) detach_dev(input);
     			if (detaching) detach_dev(t3);
     			if (detaching) detach_dev(p1);
-    			if (detaching) detach_dev(t6);
-    			if (detaching) detach_dev(button);
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -708,26 +673,18 @@ var app = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	let p;
-    	let t1;
     	let if_block_anchor;
     	let if_block = /*edge*/ ctx[0] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
-    			p = element("p");
-    			p.textContent = "Edge editor works";
-    			t1 = space();
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
-    			add_location(p, file$1, 24, 0, 370);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			insert_dev(target, t1, anchor);
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
@@ -748,8 +705,6 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t1);
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
     		}
@@ -811,7 +766,7 @@ var app = (function () {
     		}
     	};
 
-    	return [edge, sayHello, dispatch, updateEdge, input_input_handler];
+    	return [edge, dispatch, updateEdge, sayHello, input_input_handler];
     }
 
     class EdgeEditor extends SvelteComponentDev {
@@ -865,8 +820,6 @@ var app = (function () {
     	let t6;
     	let t7;
     	let input2;
-    	let t8;
-    	let button;
     	let dispose;
 
     	const block = {
@@ -884,27 +837,22 @@ var app = (function () {
     			t6 = text(t6_value);
     			t7 = space();
     			input2 = element("input");
-    			t8 = space();
-    			button = element("button");
-    			button.textContent = "Submit";
-    			add_location(p0, file$2, 34, 4, 599);
+    			add_location(p0, file$2, 34, 4, 565);
     			attr_dev(input0, "type", "text");
-    			add_location(input0, file$2, 35, 4, 630);
+    			add_location(input0, file$2, 35, 4, 596);
     			attr_dev(input1, "type", "text");
-    			add_location(input1, file$2, 36, 5, 681);
-    			add_location(p1, file$2, 37, 4, 731);
+    			add_location(input1, file$2, 36, 5, 647);
+    			add_location(p1, file$2, 37, 4, 697);
     			attr_dev(input2, "type", "file");
     			attr_dev(input2, "accept", "image/*");
     			attr_dev(input2, "class", "w-full h-full cursor-pointer");
-    			add_location(input2, file$2, 38, 0, 762);
-    			add_location(button, file$2, 45, 4, 883);
+    			add_location(input2, file$2, 38, 0, 728);
 
     			dispose = [
     				listen_dev(input0, "input", /*input0_input_handler*/ ctx[6]),
     				listen_dev(input1, "input", /*input1_input_handler*/ ctx[7]),
     				listen_dev(input2, "change", /*input2_change_handler*/ ctx[8]),
-    				listen_dev(input2, "change", /*changed*/ ctx[2], false, false, false),
-    				listen_dev(button, "click", /*sayHello*/ ctx[3], false, false, false)
+    				listen_dev(input2, "change", /*changed*/ ctx[2], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -923,8 +871,6 @@ var app = (function () {
     			append_dev(p1, t6);
     			insert_dev(target, t7, anchor);
     			insert_dev(target, input2, anchor);
-    			insert_dev(target, t8, anchor);
-    			insert_dev(target, button, anchor);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*node*/ 1 && t1_value !== (t1_value = /*node*/ ctx[0].id + "")) set_data_dev(t1, t1_value);
@@ -949,8 +895,6 @@ var app = (function () {
     			if (detaching) detach_dev(p1);
     			if (detaching) detach_dev(t7);
     			if (detaching) detach_dev(input2);
-    			if (detaching) detach_dev(t8);
-    			if (detaching) detach_dev(button);
     			run_all(dispose);
     		}
     	};
@@ -967,26 +911,18 @@ var app = (function () {
     }
 
     function create_fragment$2(ctx) {
-    	let p;
-    	let t1;
     	let if_block_anchor;
     	let if_block = /*node*/ ctx[0] && create_if_block$2(ctx);
 
     	const block = {
     		c: function create() {
-    			p = element("p");
-    			p.textContent = "Node editor Document worrks";
-    			t1 = space();
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
-    			add_location(p, file$2, 31, 0, 548);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			insert_dev(target, t1, anchor);
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
@@ -1007,8 +943,6 @@ var app = (function () {
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t1);
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
     		}
@@ -1093,9 +1027,9 @@ var app = (function () {
     		node,
     		files,
     		changed,
-    		sayHello,
     		dispatch,
     		updateNode,
+    		sayHello,
     		input0_input_handler,
     		input1_input_handler,
     		input2_change_handler
@@ -1134,16 +1068,16 @@ var app = (function () {
     /* src/Graph.svelte generated by Svelte v3.16.6 */
     const file$3 = "src/Graph.svelte";
 
-    // (145:0) {#if canEditEdge}
+    // (179:0) {#if canEditEdge}
     function create_if_block_5(ctx) {
     	let current;
 
     	const edgeeditor = new EdgeEditor({
-    			props: { edge: /*edge1*/ ctx[3][0] },
+    			props: { edge: /*edge1*/ ctx[4][0] },
     			$$inline: true
     		});
 
-    	edgeeditor.$on("message", /*edgeUpdated*/ ctx[16]);
+    	edgeeditor.$on("message", /*edgeUpdated*/ ctx[17]);
 
     	const block = {
     		c: function create() {
@@ -1155,7 +1089,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const edgeeditor_changes = {};
-    			if (dirty & /*edge1*/ 8) edgeeditor_changes.edge = /*edge1*/ ctx[3][0];
+    			if (dirty & /*edge1*/ 16) edgeeditor_changes.edge = /*edge1*/ ctx[4][0];
     			edgeeditor.$set(edgeeditor_changes);
     		},
     		i: function intro(local) {
@@ -1176,14 +1110,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(145:0) {#if canEditEdge}",
+    		source: "(179:0) {#if canEditEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (149:0) {#if canEditNode}
+    // (183:0) {#if canEditNode}
     function create_if_block_4(ctx) {
     	let switch_instance_anchor;
     	let current;
@@ -1191,14 +1125,14 @@ var app = (function () {
 
     	function switch_props(ctx) {
     		return {
-    			props: { node: /*node1*/ ctx[2][0] },
+    			props: { node: /*node1*/ ctx[3][0] },
     			$$inline: true
     		};
     	}
 
     	if (switch_value) {
     		var switch_instance = new switch_value(switch_props(ctx));
-    		switch_instance.$on("message", /*nodeUpdated*/ ctx[15]);
+    		switch_instance.$on("message", /*nodeUpdated*/ ctx[16]);
     	}
 
     	const block = {
@@ -1216,7 +1150,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const switch_instance_changes = {};
-    			if (dirty & /*node1*/ 4) switch_instance_changes.node = /*node1*/ ctx[2][0];
+    			if (dirty & /*node1*/ 8) switch_instance_changes.node = /*node1*/ ctx[3][0];
 
     			if (switch_value !== (switch_value = /*nodeEditor*/ ctx[0])) {
     				if (switch_instance) {
@@ -1232,7 +1166,7 @@ var app = (function () {
 
     				if (switch_value) {
     					switch_instance = new switch_value(switch_props(ctx));
-    					switch_instance.$on("message", /*nodeUpdated*/ ctx[15]);
+    					switch_instance.$on("message", /*nodeUpdated*/ ctx[16]);
     					create_component(switch_instance.$$.fragment);
     					transition_in(switch_instance.$$.fragment, 1);
     					mount_component(switch_instance, switch_instance_anchor.parentNode, switch_instance_anchor);
@@ -1262,14 +1196,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(149:0) {#if canEditNode}",
+    		source: "(183:0) {#if canEditNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (154:0) {#if canAddNode}
+    // (188:0) {#if canAddNode}
     function create_if_block_3(ctx) {
     	let button0;
     	let t1;
@@ -1283,12 +1217,12 @@ var app = (function () {
     			t1 = space();
     			button1 = element("button");
     			button1.textContent = "New document node";
-    			add_location(button0, file$3, 154, 2, 3971);
-    			add_location(button1, file$3, 155, 3, 4022);
+    			add_location(button0, file$3, 188, 2, 4457);
+    			add_location(button1, file$3, 189, 3, 4508);
 
     			dispose = [
-    				listen_dev(button0, "click", /*addNewNode*/ ctx[13], false, false, false),
-    				listen_dev(button1, "click", /*addNewDocumentNode*/ ctx[14], false, false, false)
+    				listen_dev(button0, "click", /*addNewNode*/ ctx[14], false, false, false),
+    				listen_dev(button1, "click", /*addNewDocumentNode*/ ctx[15], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -1309,18 +1243,18 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(154:0) {#if canAddNode}",
+    		source: "(188:0) {#if canAddNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (159:0) {#if canDeleteNodes}
+    // (193:0) {#if canDeleteNodes}
     function create_if_block_2(ctx) {
     	let button;
     	let t0;
-    	let t1_value = (/*nodesSelected*/ ctx[1] > 1 ? "(s)" : "") + "";
+    	let t1_value = (/*nodesSelected*/ ctx[2] > 1 ? "(s)" : "") + "";
     	let t1;
     	let dispose;
 
@@ -1329,8 +1263,8 @@ var app = (function () {
     			button = element("button");
     			t0 = text("Delete node");
     			t1 = text(t1_value);
-    			add_location(button, file$3, 159, 2, 4117);
-    			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[12], false, false, false);
+    			add_location(button, file$3, 193, 2, 4603);
+    			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[13], false, false, false);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1338,7 +1272,7 @@ var app = (function () {
     			append_dev(button, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*nodesSelected*/ 2 && t1_value !== (t1_value = (/*nodesSelected*/ ctx[1] > 1 ? "(s)" : "") + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*nodesSelected*/ 4 && t1_value !== (t1_value = (/*nodesSelected*/ ctx[2] > 1 ? "(s)" : "") + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(button);
@@ -1350,14 +1284,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(159:0) {#if canDeleteNodes}",
+    		source: "(193:0) {#if canDeleteNodes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (163:0) {#if canAddEdge}
+    // (197:0) {#if canAddEdge}
     function create_if_block_1(ctx) {
     	let button;
     	let dispose;
@@ -1366,8 +1300,8 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Add Edge";
-    			add_location(button, file$3, 163, 2, 4226);
-    			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[10], false, false, false);
+    			add_location(button, file$3, 197, 2, 4712);
+    			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[11], false, false, false);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1383,14 +1317,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(163:0) {#if canAddEdge}",
+    		source: "(197:0) {#if canAddEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (167:0) {#if canDeleteEdge}
+    // (201:0) {#if canDeleteEdge}
     function create_if_block$3(ctx) {
     	let button;
     	let dispose;
@@ -1399,8 +1333,8 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Delete Edge";
-    			add_location(button, file$3, 167, 2, 4303);
-    			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[11], false, false, false);
+    			add_location(button, file$3, 201, 2, 4789);
+    			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1416,7 +1350,7 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(167:0) {#if canDeleteEdge}",
+    		source: "(201:0) {#if canDeleteEdge}",
     		ctx
     	});
 
@@ -1424,61 +1358,82 @@ var app = (function () {
     }
 
     function create_fragment$3(ctx) {
-    	let t0;
+    	let div0;
+    	let button;
     	let t1;
     	let t2;
     	let t3;
     	let t4;
     	let t5;
-    	let div;
+    	let t6;
+    	let t7;
+    	let div1;
     	let current;
-    	let if_block0 = /*canEditEdge*/ ctx[9] && create_if_block_5(ctx);
-    	let if_block1 = /*canEditNode*/ ctx[8] && create_if_block_4(ctx);
-    	let if_block2 = /*canAddNode*/ ctx[7] && create_if_block_3(ctx);
-    	let if_block3 = /*canDeleteNodes*/ ctx[6] && create_if_block_2(ctx);
-    	let if_block4 = /*canAddEdge*/ ctx[4] && create_if_block_1(ctx);
-    	let if_block5 = /*canDeleteEdge*/ ctx[5] && create_if_block$3(ctx);
+    	let dispose;
+    	add_render_callback(/*onwindowresize*/ ctx[27]);
+    	let if_block0 = /*canEditEdge*/ ctx[10] && create_if_block_5(ctx);
+    	let if_block1 = /*canEditNode*/ ctx[9] && create_if_block_4(ctx);
+    	let if_block2 = /*canAddNode*/ ctx[8] && create_if_block_3(ctx);
+    	let if_block3 = /*canDeleteNodes*/ ctx[7] && create_if_block_2(ctx);
+    	let if_block4 = /*canAddEdge*/ ctx[5] && create_if_block_1(ctx);
+    	let if_block5 = /*canDeleteEdge*/ ctx[6] && create_if_block$3(ctx);
 
     	const block = {
     		c: function create() {
-    			if (if_block0) if_block0.c();
-    			t0 = space();
-    			if (if_block1) if_block1.c();
+    			div0 = element("div");
+    			button = element("button");
+    			button.textContent = "Center";
     			t1 = space();
-    			if (if_block2) if_block2.c();
+    			if (if_block0) if_block0.c();
     			t2 = space();
-    			if (if_block3) if_block3.c();
+    			if (if_block1) if_block1.c();
     			t3 = space();
-    			if (if_block4) if_block4.c();
+    			if (if_block2) if_block2.c();
     			t4 = space();
-    			if (if_block5) if_block5.c();
+    			if (if_block3) if_block3.c();
     			t5 = space();
-    			div = element("div");
-    			attr_dev(div, "id", "mynet");
-    			attr_dev(div, "class", "graph svelte-2xh8s0");
-    			add_location(div, file$3, 170, 0, 4361);
+    			if (if_block4) if_block4.c();
+    			t6 = space();
+    			if (if_block5) if_block5.c();
+    			t7 = space();
+    			div1 = element("div");
+    			add_location(button, file$3, 177, 0, 4103);
+    			attr_dev(div0, "class", "l0 editZone svelte-1y6qgrh");
+    			add_location(div0, file$3, 176, 0, 4077);
+    			attr_dev(div1, "id", "mynet");
+    			attr_dev(div1, "class", "graph svelte-1y6qgrh");
+    			set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
+    			add_location(div1, file$3, 205, 0, 4854);
+
+    			dispose = [
+    				listen_dev(window, "resize", /*onwindowresize*/ ctx[27]),
+    				listen_dev(button, "click", /*fit*/ ctx[18], false, false, false)
+    			];
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			if (if_block0) if_block0.m(target, anchor);
-    			insert_dev(target, t0, anchor);
-    			if (if_block1) if_block1.m(target, anchor);
-    			insert_dev(target, t1, anchor);
-    			if (if_block2) if_block2.m(target, anchor);
-    			insert_dev(target, t2, anchor);
-    			if (if_block3) if_block3.m(target, anchor);
-    			insert_dev(target, t3, anchor);
-    			if (if_block4) if_block4.m(target, anchor);
-    			insert_dev(target, t4, anchor);
-    			if (if_block5) if_block5.m(target, anchor);
-    			insert_dev(target, t5, anchor);
-    			insert_dev(target, div, anchor);
+    			insert_dev(target, div0, anchor);
+    			append_dev(div0, button);
+    			append_dev(div0, t1);
+    			if (if_block0) if_block0.m(div0, null);
+    			append_dev(div0, t2);
+    			if (if_block1) if_block1.m(div0, null);
+    			append_dev(div0, t3);
+    			if (if_block2) if_block2.m(div0, null);
+    			append_dev(div0, t4);
+    			if (if_block3) if_block3.m(div0, null);
+    			append_dev(div0, t5);
+    			if (if_block4) if_block4.m(div0, null);
+    			append_dev(div0, t6);
+    			if (if_block5) if_block5.m(div0, null);
+    			insert_dev(target, t7, anchor);
+    			insert_dev(target, div1, anchor);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (/*canEditEdge*/ ctx[9]) {
+    			if (/*canEditEdge*/ ctx[10]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     					transition_in(if_block0, 1);
@@ -1486,7 +1441,7 @@ var app = (function () {
     					if_block0 = create_if_block_5(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
-    					if_block0.m(t0.parentNode, t0);
+    					if_block0.m(div0, t2);
     				}
     			} else if (if_block0) {
     				group_outros();
@@ -1498,7 +1453,7 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*canEditNode*/ ctx[8]) {
+    			if (/*canEditNode*/ ctx[9]) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     					transition_in(if_block1, 1);
@@ -1506,7 +1461,7 @@ var app = (function () {
     					if_block1 = create_if_block_4(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
-    					if_block1.m(t1.parentNode, t1);
+    					if_block1.m(div0, t3);
     				}
     			} else if (if_block1) {
     				group_outros();
@@ -1518,56 +1473,60 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*canAddNode*/ ctx[7]) {
+    			if (/*canAddNode*/ ctx[8]) {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
     					if_block2 = create_if_block_3(ctx);
     					if_block2.c();
-    					if_block2.m(t2.parentNode, t2);
+    					if_block2.m(div0, t4);
     				}
     			} else if (if_block2) {
     				if_block2.d(1);
     				if_block2 = null;
     			}
 
-    			if (/*canDeleteNodes*/ ctx[6]) {
+    			if (/*canDeleteNodes*/ ctx[7]) {
     				if (if_block3) {
     					if_block3.p(ctx, dirty);
     				} else {
     					if_block3 = create_if_block_2(ctx);
     					if_block3.c();
-    					if_block3.m(t3.parentNode, t3);
+    					if_block3.m(div0, t5);
     				}
     			} else if (if_block3) {
     				if_block3.d(1);
     				if_block3 = null;
     			}
 
-    			if (/*canAddEdge*/ ctx[4]) {
+    			if (/*canAddEdge*/ ctx[5]) {
     				if (if_block4) {
     					if_block4.p(ctx, dirty);
     				} else {
     					if_block4 = create_if_block_1(ctx);
     					if_block4.c();
-    					if_block4.m(t4.parentNode, t4);
+    					if_block4.m(div0, t6);
     				}
     			} else if (if_block4) {
     				if_block4.d(1);
     				if_block4 = null;
     			}
 
-    			if (/*canDeleteEdge*/ ctx[5]) {
+    			if (/*canDeleteEdge*/ ctx[6]) {
     				if (if_block5) {
     					if_block5.p(ctx, dirty);
     				} else {
     					if_block5 = create_if_block$3(ctx);
     					if_block5.c();
-    					if_block5.m(t5.parentNode, t5);
+    					if_block5.m(div0, null);
     				}
     			} else if (if_block5) {
     				if_block5.d(1);
     				if_block5 = null;
+    			}
+
+    			if (!current || dirty & /*inh*/ 2) {
+    				set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
     			}
     		},
     		i: function intro(local) {
@@ -1582,19 +1541,16 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (if_block0) if_block0.d(detaching);
-    			if (detaching) detach_dev(t0);
-    			if (if_block1) if_block1.d(detaching);
-    			if (detaching) detach_dev(t1);
-    			if (if_block2) if_block2.d(detaching);
-    			if (detaching) detach_dev(t2);
-    			if (if_block3) if_block3.d(detaching);
-    			if (detaching) detach_dev(t3);
-    			if (if_block4) if_block4.d(detaching);
-    			if (detaching) detach_dev(t4);
-    			if (if_block5) if_block5.d(detaching);
-    			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(div);
+    			if (detaching) detach_dev(div0);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    			if (if_block2) if_block2.d();
+    			if (if_block3) if_block3.d();
+    			if (if_block4) if_block4.d();
+    			if (if_block5) if_block5.d();
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(div1);
+    			run_all(dispose);
     		}
     	};
 
@@ -1612,6 +1568,8 @@ var app = (function () {
     function instance$3($$self, $$props, $$invalidate) {
     	let selection = { nodes: [], edges: [] };
     	let nodeEditor = NodeEditor;
+    	let inh;
+    	let inw;
 
     	var nodes = new gO([
     			{
@@ -1639,6 +1597,9 @@ var app = (function () {
     	var data = { nodes, edges };
 
     	var options = {
+    		autoResize: true,
+    		height: "100%",
+    		width: "100%",
     		interaction: { multiselect: true },
     		nodes: {
     			shapeProperties: { useBorderWithImage: true }
@@ -1652,7 +1613,7 @@ var app = (function () {
     		network = new AT(container, data, options);
 
     		network.on("select", function (params) {
-    			$$invalidate(17, selection = params);
+    			$$invalidate(19, selection = params);
     		});
     	});
 
@@ -1661,14 +1622,14 @@ var app = (function () {
     			edges.add({
     				from: node1[0].id,
     				to: node2[0].id,
-    				label: "New edge"
+    				label: ""
     			});
     		}
     	}
 
     	function deleteEdge() {
     		edges.remove(edge1[0]);
-    		$$invalidate(17, selection.edges = [], selection);
+    		$$invalidate(19, selection.edges = [], selection);
     	}
 
     	function deleteNodes() {
@@ -1684,14 +1645,14 @@ var app = (function () {
     				var newEdge = edges.add({
     					from: node1[0].id,
     					to: newNode[0],
-    					label: "New edge",
+    					label: "",
     					...edgeattr
     				});
 
-    				$$invalidate(17, selection.edges = [], selection);
+    				$$invalidate(19, selection.edges = [], selection);
     			}
 
-    			$$invalidate(17, selection.nodes = newNode, selection);
+    			$$invalidate(19, selection.nodes = newNode, selection);
     			network.selectNodes(newNode);
     		}
     	}
@@ -1718,28 +1679,38 @@ var app = (function () {
     		edges.update(event.detail.edge);
     	}
 
+    	function fit() {
+    		network.fit();
+    	}
+
+    	function onwindowresize() {
+    		$$invalidate(1, inh = window.innerHeight);
+    	}
+
     	$$self.$capture_state = () => {
     		return {};
     	};
 
     	$$self.$inject_state = $$props => {
-    		if ("selection" in $$props) $$invalidate(17, selection = $$props.selection);
+    		if ("selection" in $$props) $$invalidate(19, selection = $$props.selection);
     		if ("nodeEditor" in $$props) $$invalidate(0, nodeEditor = $$props.nodeEditor);
-    		if ("nodes" in $$props) $$invalidate(20, nodes = $$props.nodes);
-    		if ("edges" in $$props) $$invalidate(21, edges = $$props.edges);
+    		if ("inh" in $$props) $$invalidate(1, inh = $$props.inh);
+    		if ("inw" in $$props) inw = $$props.inw;
+    		if ("nodes" in $$props) $$invalidate(23, nodes = $$props.nodes);
+    		if ("edges" in $$props) $$invalidate(24, edges = $$props.edges);
     		if ("data" in $$props) data = $$props.data;
     		if ("options" in $$props) options = $$props.options;
     		if ("network" in $$props) network = $$props.network;
-    		if ("nodesSelected" in $$props) $$invalidate(1, nodesSelected = $$props.nodesSelected);
-    		if ("node1" in $$props) $$invalidate(2, node1 = $$props.node1);
+    		if ("nodesSelected" in $$props) $$invalidate(2, nodesSelected = $$props.nodesSelected);
+    		if ("node1" in $$props) $$invalidate(3, node1 = $$props.node1);
     		if ("node2" in $$props) node2 = $$props.node2;
-    		if ("edge1" in $$props) $$invalidate(3, edge1 = $$props.edge1);
-    		if ("canAddEdge" in $$props) $$invalidate(4, canAddEdge = $$props.canAddEdge);
-    		if ("canDeleteEdge" in $$props) $$invalidate(5, canDeleteEdge = $$props.canDeleteEdge);
-    		if ("canDeleteNodes" in $$props) $$invalidate(6, canDeleteNodes = $$props.canDeleteNodes);
-    		if ("canAddNode" in $$props) $$invalidate(7, canAddNode = $$props.canAddNode);
-    		if ("canEditNode" in $$props) $$invalidate(8, canEditNode = $$props.canEditNode);
-    		if ("canEditEdge" in $$props) $$invalidate(9, canEditEdge = $$props.canEditEdge);
+    		if ("edge1" in $$props) $$invalidate(4, edge1 = $$props.edge1);
+    		if ("canAddEdge" in $$props) $$invalidate(5, canAddEdge = $$props.canAddEdge);
+    		if ("canDeleteEdge" in $$props) $$invalidate(6, canDeleteEdge = $$props.canDeleteEdge);
+    		if ("canDeleteNodes" in $$props) $$invalidate(7, canDeleteNodes = $$props.canDeleteNodes);
+    		if ("canAddNode" in $$props) $$invalidate(8, canAddNode = $$props.canAddNode);
+    		if ("canEditNode" in $$props) $$invalidate(9, canEditNode = $$props.canEditNode);
+    		if ("canEditEdge" in $$props) $$invalidate(10, canEditEdge = $$props.canEditEdge);
     	};
 
     	let nodesSelected;
@@ -1754,47 +1725,47 @@ var app = (function () {
     	let canEditEdge;
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(1, nodesSelected = selection.nodes.length);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(2, nodesSelected = selection.nodes.length);
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(2, node1 = nodes.get(selection.nodes.slice(0, 1)));
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(3, node1 = nodes.get(selection.nodes.slice(0, 1)));
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
     			 node2 = nodes.get(selection.nodes.slice(1, 2));
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(3, edge1 = edges.get(selection.edges.slice(0, 1)));
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(4, edge1 = edges.get(selection.edges.slice(0, 1)));
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(4, canAddEdge = selection.nodes.length === 2);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(5, canAddEdge = selection.nodes.length === 2);
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(5, canDeleteEdge = selection.nodes.length === 0 && selection.edges.length === 1);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(6, canDeleteEdge = selection.nodes.length === 0 && selection.edges.length === 1);
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(6, canDeleteNodes = selection.nodes.length > 0);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(7, canDeleteNodes = selection.nodes.length > 0);
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(7, canAddNode = selection.nodes.length <= 1);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(8, canAddNode = selection.nodes.length <= 1);
     		}
 
-    		if ($$self.$$.dirty & /*selection*/ 131072) {
-    			 $$invalidate(8, canEditNode = selection.nodes.length === 1);
+    		if ($$self.$$.dirty & /*selection*/ 524288) {
+    			 $$invalidate(9, canEditNode = selection.nodes.length === 1);
     		}
 
-    		if ($$self.$$.dirty & /*selection, canEditNode*/ 131328) {
-    			 $$invalidate(9, canEditEdge = selection.edges.length === 1 && !canEditNode);
+    		if ($$self.$$.dirty & /*selection, canEditNode*/ 524800) {
+    			 $$invalidate(10, canEditEdge = selection.edges.length === 1 && !canEditNode);
     		}
 
-    		if ($$self.$$.dirty & /*canEditNode, node1*/ 260) {
+    		if ($$self.$$.dirty & /*canEditNode, node1*/ 520) {
     			 {
     				if (canEditNode) {
     					$$invalidate(0, nodeEditor = node1[0].nodeEditor ? node1[0].nodeEditor : NodeEditor);
@@ -1805,6 +1776,7 @@ var app = (function () {
 
     	return [
     		nodeEditor,
+    		inh,
     		nodesSelected,
     		node1,
     		edge1,
@@ -1820,7 +1792,17 @@ var app = (function () {
     		addNewNode,
     		addNewDocumentNode,
     		nodeUpdated,
-    		edgeUpdated
+    		edgeUpdated,
+    		fit,
+    		selection,
+    		network,
+    		node2,
+    		inw,
+    		nodes,
+    		edges,
+    		data,
+    		options,
+    		onwindowresize
     	];
     }
 
