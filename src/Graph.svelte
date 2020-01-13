@@ -2,7 +2,7 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   //import { nodeSelection } from './GraphStore.js';
+   import { nodes, edges } from './GraphStore.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
@@ -33,22 +33,7 @@
   let inh;
   let inw;
 
-	 var nodes = new vis.DataSet([
-    {id: 1, label: 'Node 1', shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
-  ]);
 
-  // create an array with edges
-  var edges = new vis.DataSet([
-    {from: 1, to: 3},
-    {from: 1, to: 2},
-    {from: 2, to: 4},
-    {from: 2, to: 5},
-    {from: 3, to: 3}
-  ]);
 
   var data = {
     nodes: nodes,
