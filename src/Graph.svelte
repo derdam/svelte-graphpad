@@ -105,7 +105,7 @@
     };
 
     function addNewDocumentNode() {
-      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:50, image: './Austrian_ID_card.jpg'},
+      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './Austrian_ID_card.jpg'},
       {});
     }
 
