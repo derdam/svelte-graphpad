@@ -41,14 +41,15 @@
   };
 
   var options = {
-   
+   physics: true,
    autoResize: true,
             height: '100%',
             width: '100%',
     interaction: { multiselect: true},
     nodes:{
      shapeProperties: {
-            useBorderWithImage:true
+            useBorderWithImage:true,
+            interpolation:true
           }
     }
   };
@@ -104,9 +105,44 @@
      }
     };
 
+    function sampleDocumentNode() {
+      return {shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './Austrian_ID_card.jpg'}
+    }
+     function sampleLegalDocumentNode() {
+      return {shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './contract-signing.png'}
+    }
+
     function addNewDocumentNode() {
-      addNewNode({shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './Austrian_ID_card.jpg'},
+      addNewNode(sampleDocumentNode(),
       {});
+    }
+
+
+    function addNewSingleAccount() {
+      nodes.clear();
+      edges.clear();
+    //  let x = `${someone} was looking for ${something} in the general vicinity of ${somewhere}`;
+      nodes.add([
+        {id: "sa_mandate", label: "New\nMandate"},
+        {id: "sa_ah1", label: "Account\nHolder"},
+        {id: "sa_bo1", label: "Beneficial\nOwner"},
+        {id: "sa_np1", label: "Natural\nPerson"},
+        {id: "sa_np1_id", label: "ID Card", ...sampleDocumentNode()},
+        {id: "sa_ah1_doc0", label: "Form 0", ...sampleLegalDocumentNode()},
+        {id: "sa_bo1_doc4", label: "Form 4", ...sampleLegalDocumentNode()},
+       
+        
+      ]);
+      edges.add([
+        {from: "sa_mandate", to:"sa_ah1"},
+        {from: "sa_mandate", to:"sa_bo1"},
+        {from: "sa_ah1", to:"sa_np1"},
+        {from: "sa_bo1", to:"sa_np1"},
+        {from: "sa_np1", to:"sa_np1_id"},
+        {from: "sa_ah1", to:"sa_ah1_doc0"},
+          {from: "sa_bo1", to:"sa_bo1_doc4"},
+      ]);
+
     }
 
     // Event handlers 
@@ -177,6 +213,8 @@
 {#if canAddNode}
   <button on:click={addNewNode}>New node</button>
    <button on:click={addNewDocumentNode}>New document node</button>
+   <button on:click={addNewSingleAccount}>New Single Account</button>
+   
 {/if}
 
 {#if canDeleteNodes}
