@@ -66,7 +66,8 @@
         selection = params;
     });
 
-   // network.on("stabilized", function(x) {network.fit(); });
+   //network.on("stabilized", function() {network.fit(); });
+
 
    setTimeout(() => {
           network.fit();
@@ -113,7 +114,7 @@
     }
 
     function addNewDocumentNode() {
-      addNewNode(sampleDocumentNode(),
+      addNewNode(sampleLegalDocumentNode(),
       {});
     }
 
@@ -123,7 +124,7 @@
       edges.clear();
     //  let x = `${someone} was looking for ${something} in the general vicinity of ${somewhere}`;
       nodes.add([
-        {id: "sa_mandate", label: "New\nMandate"},
+        {id: "sa_mandate", label: "Single\nAccount"},
         {id: "sa_ah1", label: "Account\nHolder"},
         {id: "sa_bo1", label: "Beneficial\nOwner"},
         {id: "sa_np1", label: "Natural\nPerson"},
