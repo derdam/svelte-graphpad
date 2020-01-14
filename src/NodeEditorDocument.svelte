@@ -35,6 +35,7 @@
     <p>Node.id : {node.id}</p>
     <input type="text" bind:value={node.label} />
      <input type="text" bind:value={node.image} />
+     <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
     <p>New label: {node.label}</p>
 <input
 		type="file"

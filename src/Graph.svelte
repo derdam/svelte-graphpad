@@ -66,6 +66,10 @@
     });
 
    // network.on("stabilized", function(x) {network.fit(); });
+
+   setTimeout(() => {
+          network.fit();
+        }, 1000);
   
   });
   

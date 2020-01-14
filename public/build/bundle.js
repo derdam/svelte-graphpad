@@ -56,6 +56,9 @@ var app = (function () {
         else if (node.getAttribute(attribute) !== value)
             node.setAttribute(attribute, value);
     }
+    function to_number(value) {
+        return value === '' ? undefined : +value;
+    }
     function children(element) {
         return Array.from(element.childNodes);
     }
@@ -818,12 +821,18 @@ var app = (function () {
     	let t3;
     	let input1;
     	let t4;
-    	let p1;
+    	let input2;
+    	let span;
     	let t5;
-    	let t6_value = /*node*/ ctx[0].label + "";
+    	let t6_value = /*node*/ ctx[0].size + "";
     	let t6;
     	let t7;
-    	let input2;
+    	let p1;
+    	let t8;
+    	let t9_value = /*node*/ ctx[0].label + "";
+    	let t9;
+    	let t10;
+    	let input3;
     	let dispose;
 
     	const block = {
@@ -836,27 +845,40 @@ var app = (function () {
     			t3 = space();
     			input1 = element("input");
     			t4 = space();
-    			p1 = element("p");
-    			t5 = text("New label: ");
+    			input2 = element("input");
+    			span = element("span");
+    			t5 = text(" ");
     			t6 = text(t6_value);
     			t7 = space();
-    			input2 = element("input");
+    			p1 = element("p");
+    			t8 = text("New label: ");
+    			t9 = text(t9_value);
+    			t10 = space();
+    			input3 = element("input");
     			add_location(p0, file$2, 34, 4, 565);
     			attr_dev(input0, "type", "text");
     			add_location(input0, file$2, 35, 4, 596);
     			attr_dev(input1, "type", "text");
     			add_location(input1, file$2, 36, 5, 647);
-    			add_location(p1, file$2, 37, 4, 697);
-    			attr_dev(input2, "type", "file");
-    			attr_dev(input2, "accept", "image/*");
-    			attr_dev(input2, "class", "w-full h-full cursor-pointer");
-    			add_location(input2, file$2, 38, 0, 728);
+    			attr_dev(input2, "type", "range");
+    			attr_dev(input2, "min", "45");
+    			attr_dev(input2, "max", "200");
+    			attr_dev(input2, "step", "5");
+    			add_location(input2, file$2, 37, 5, 698);
+    			add_location(span, file$2, 37, 68, 761);
+    			add_location(p1, file$2, 38, 4, 796);
+    			attr_dev(input3, "type", "file");
+    			attr_dev(input3, "accept", "image/*");
+    			attr_dev(input3, "class", "w-full h-full cursor-pointer");
+    			add_location(input3, file$2, 39, 0, 827);
 
     			dispose = [
     				listen_dev(input0, "input", /*input0_input_handler*/ ctx[6]),
     				listen_dev(input1, "input", /*input1_input_handler*/ ctx[7]),
-    				listen_dev(input2, "change", /*input2_change_handler*/ ctx[8]),
-    				listen_dev(input2, "change", /*changed*/ ctx[2], false, false, false)
+    				listen_dev(input2, "change", /*input2_change_input_handler*/ ctx[8]),
+    				listen_dev(input2, "input", /*input2_change_input_handler*/ ctx[8]),
+    				listen_dev(input3, "change", /*input3_change_handler*/ ctx[9]),
+    				listen_dev(input3, "change", /*changed*/ ctx[2], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -870,11 +892,17 @@ var app = (function () {
     			insert_dev(target, input1, anchor);
     			set_input_value(input1, /*node*/ ctx[0].image);
     			insert_dev(target, t4, anchor);
-    			insert_dev(target, p1, anchor);
-    			append_dev(p1, t5);
-    			append_dev(p1, t6);
-    			insert_dev(target, t7, anchor);
     			insert_dev(target, input2, anchor);
+    			set_input_value(input2, /*node*/ ctx[0].size);
+    			insert_dev(target, span, anchor);
+    			append_dev(span, t5);
+    			append_dev(span, t6);
+    			insert_dev(target, t7, anchor);
+    			insert_dev(target, p1, anchor);
+    			append_dev(p1, t8);
+    			append_dev(p1, t9);
+    			insert_dev(target, t10, anchor);
+    			insert_dev(target, input3, anchor);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*node*/ 1 && t1_value !== (t1_value = /*node*/ ctx[0].id + "")) set_data_dev(t1, t1_value);
@@ -887,7 +915,12 @@ var app = (function () {
     				set_input_value(input1, /*node*/ ctx[0].image);
     			}
 
-    			if (dirty & /*node*/ 1 && t6_value !== (t6_value = /*node*/ ctx[0].label + "")) set_data_dev(t6, t6_value);
+    			if (dirty & /*node*/ 1) {
+    				set_input_value(input2, /*node*/ ctx[0].size);
+    			}
+
+    			if (dirty & /*node*/ 1 && t6_value !== (t6_value = /*node*/ ctx[0].size + "")) set_data_dev(t6, t6_value);
+    			if (dirty & /*node*/ 1 && t9_value !== (t9_value = /*node*/ ctx[0].label + "")) set_data_dev(t9, t9_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p0);
@@ -896,9 +929,12 @@ var app = (function () {
     			if (detaching) detach_dev(t3);
     			if (detaching) detach_dev(input1);
     			if (detaching) detach_dev(t4);
-    			if (detaching) detach_dev(p1);
-    			if (detaching) detach_dev(t7);
     			if (detaching) detach_dev(input2);
+    			if (detaching) detach_dev(span);
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(p1);
+    			if (detaching) detach_dev(t10);
+    			if (detaching) detach_dev(input3);
     			run_all(dispose);
     		}
     	};
@@ -1001,7 +1037,12 @@ var app = (function () {
     		$$invalidate(0, node);
     	}
 
-    	function input2_change_handler() {
+    	function input2_change_input_handler() {
+    		node.size = to_number(this.value);
+    		$$invalidate(0, node);
+    	}
+
+    	function input3_change_handler() {
     		files = this.files;
     		$$invalidate(1, files);
     	}
@@ -1036,7 +1077,8 @@ var app = (function () {
     		sayHello,
     		input0_input_handler,
     		input1_input_handler,
-    		input2_change_handler
+    		input2_change_input_handler,
+    		input3_change_handler
     	];
     }
 
@@ -1072,7 +1114,7 @@ var app = (function () {
     /* src/Graph.svelte generated by Svelte v3.16.6 */
     const file$3 = "src/Graph.svelte";
 
-    // (164:0) {#if canEditEdge}
+    // (168:0) {#if canEditEdge}
     function create_if_block_5(ctx) {
     	let current;
 
@@ -1114,14 +1156,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(164:0) {#if canEditEdge}",
+    		source: "(168:0) {#if canEditEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (168:0) {#if canEditNode}
+    // (172:0) {#if canEditNode}
     function create_if_block_4(ctx) {
     	let switch_instance_anchor;
     	let current;
@@ -1200,14 +1242,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(168:0) {#if canEditNode}",
+    		source: "(172:0) {#if canEditNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (173:0) {#if canAddNode}
+    // (177:0) {#if canAddNode}
     function create_if_block_3(ctx) {
     	let button0;
     	let t1;
@@ -1221,8 +1263,8 @@ var app = (function () {
     			t1 = space();
     			button1 = element("button");
     			button1.textContent = "New document node";
-    			add_location(button0, file$3, 173, 2, 3998);
-    			add_location(button1, file$3, 174, 3, 4049);
+    			add_location(button0, file$3, 177, 2, 4064);
+    			add_location(button1, file$3, 178, 3, 4115);
 
     			dispose = [
     				listen_dev(button0, "click", /*addNewNode*/ ctx[14], false, false, false),
@@ -1247,14 +1289,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(173:0) {#if canAddNode}",
+    		source: "(177:0) {#if canAddNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (178:0) {#if canDeleteNodes}
+    // (182:0) {#if canDeleteNodes}
     function create_if_block_2(ctx) {
     	let button;
     	let t0;
@@ -1267,7 +1309,7 @@ var app = (function () {
     			button = element("button");
     			t0 = text("Delete node");
     			t1 = text(t1_value);
-    			add_location(button, file$3, 178, 2, 4144);
+    			add_location(button, file$3, 182, 2, 4210);
     			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[13], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1288,14 +1330,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(178:0) {#if canDeleteNodes}",
+    		source: "(182:0) {#if canDeleteNodes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (182:0) {#if canAddEdge}
+    // (186:0) {#if canAddEdge}
     function create_if_block_1(ctx) {
     	let button;
     	let dispose;
@@ -1304,7 +1346,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Add Edge";
-    			add_location(button, file$3, 182, 2, 4253);
+    			add_location(button, file$3, 186, 2, 4319);
     			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[11], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1321,14 +1363,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(182:0) {#if canAddEdge}",
+    		source: "(186:0) {#if canAddEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (186:0) {#if canDeleteEdge}
+    // (190:0) {#if canDeleteEdge}
     function create_if_block$3(ctx) {
     	let button;
     	let dispose;
@@ -1337,7 +1379,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Delete Edge";
-    			add_location(button, file$3, 186, 2, 4330);
+    			add_location(button, file$3, 190, 2, 4396);
     			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1354,7 +1396,7 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(186:0) {#if canDeleteEdge}",
+    		source: "(190:0) {#if canDeleteEdge}",
     		ctx
     	});
 
@@ -1401,13 +1443,13 @@ var app = (function () {
     			if (if_block5) if_block5.c();
     			t7 = space();
     			div1 = element("div");
-    			add_location(button, file$3, 162, 0, 3644);
+    			add_location(button, file$3, 166, 0, 3710);
     			attr_dev(div0, "class", "l0 editZone svelte-1y6qgrh");
-    			add_location(div0, file$3, 161, 0, 3618);
+    			add_location(div0, file$3, 165, 0, 3684);
     			attr_dev(div1, "id", "mynet");
     			attr_dev(div1, "class", "graph svelte-1y6qgrh");
     			set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
-    			add_location(div1, file$3, 190, 0, 4395);
+    			add_location(div1, file$3, 194, 0, 4461);
 
     			dispose = [
     				listen_dev(window, "resize", /*onwindowresize*/ ctx[23]),
@@ -1603,6 +1645,13 @@ var app = (function () {
     		network.on("select", function (params) {
     			$$invalidate(17, selection = params);
     		});
+
+    		setTimeout(
+    			() => {
+    				network.fit();
+    			},
+    			1000
+    		);
     	});
 
     	function addNewEdge() {
