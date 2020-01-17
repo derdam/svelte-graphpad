@@ -2,7 +2,7 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   import { nodes, edges } from './GraphStore.js';
+   import { nodes, edges, addNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
@@ -85,27 +85,27 @@
 
    function addNewEdge() {
     if (nodesSelected === 2) {
-        edges.add({from: node1[0].id, to: node2[0].id, label: ''});
+        addEdge({from: node1[0].id, to: node2[0].id, label: ''});
     }
    }
 
    function deleteEdge() {
        // alert(JSON.stringify(edge1));
-        edges.remove(edge1[0]);
+        removeEdge(edge1[0]);
         selection.edges = []
    }
 
    function deleteNodes() {
-     edges.remove(selection.edges);
-     nodes.remove(selection.nodes);
+     removeEdge(selection.edges);
+     removeNode(selection.nodes);
    }
 
    function addNewNode(attr, edgeattr) {
      if (nodesSelected <= 1) {
-      var newNode = nodes.add({label: 'New\nNode', ...attr});
+      var newNode = addNode({label: 'New\nNode', ...attr});
       if (nodesSelected===1) {
         //alert("foo. "+JSON.stringify(node1.id);
-        var newEdge = edges.add({from: node1[0].id, to: newNode[0], label: '', ...edgeattr});
+        var newEdge = addEdge({from: node1[0].id, to: newNode[0], label: '', ...edgeattr});
          selection.edges = []; 
       }
         selection.nodes = newNode;
@@ -130,7 +130,7 @@
       nodes.clear();
       edges.clear();
     //  let x = `${someone} was looking for ${something} in the general vicinity of ${somewhere}`;
-      nodes.add([
+      addNode([
         {id: "sa_mandate", label: "Single\nAccount"},
         {id: "sa_ah1", label: "Account\nHolder"},
         {id: "sa_bo1", label: "Beneficial\nOwner"},
@@ -141,7 +141,7 @@
        
         
       ]);
-      edges.add([
+      addEdge([
         {from: "sa_mandate", to:"sa_ah1"},
         {from: "sa_mandate", to:"sa_bo1"},
         {from: "sa_ah1", to:"sa_np1"},
