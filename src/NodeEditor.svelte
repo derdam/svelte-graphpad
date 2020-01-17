@@ -1,30 +1,15 @@
 <script>
-   
-   import { createEventDispatcher } from 'svelte';
 
-    export let node;
+   import { updateNode } from './GraphStore.js';
 
-    const dispatch = createEventDispatcher();
+   export let node;
 
     $: { updateNode(node); }
 
-    function updateNode(node) {
-    dispatch('message', {
-            node: node
-        });
-    };
-
-    function sayHello() {
-        updateNode(node)
-    }
-
 </script>
 
-
-
 {#if node}
-    <p>Node.id : {node.id}</p>
-    <input type="text" bind:value={node.label} />
-    <p>New label: {node.label}</p>
+  Label&nbsp;<input type="text" bind:value={node.label} />
+  Class&nbsp;<input type="text" bind:value={node.nodeClass} />
    <!-- <button on:click={sayHello}>Submit</button> -->
 {/if}

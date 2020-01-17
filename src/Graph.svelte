@@ -6,7 +6,14 @@
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
+   import GraphData from './GraphData.svelte';
 
+
+  let container = { 
+     EdgeEditor: EdgeEditor,
+     NodeEditor: NodeEditor,
+     NodeEditorDocument: NodeEditorDocument
+   }
 
    let selection = {nodes: [], edges: []};
 
@@ -107,10 +114,10 @@
     };
 
     function sampleDocumentNode() {
-      return {shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './Austrian_ID_card.jpg'}
+      return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
     }
      function sampleLegalDocumentNode() {
-      return {shape: 'image',  nodeEditor:NodeEditorDocument, size:45, image: './contract-signing.png'}
+      return {shape: 'image',   size:45, image: './contract-signing.png'}
     }
 
     function addNewDocumentNode() {
@@ -128,9 +135,9 @@
         {id: "sa_ah1", label: "Account\nHolder"},
         {id: "sa_bo1", label: "Beneficial\nOwner"},
         {id: "sa_np1", label: "Natural\nPerson"},
-        {id: "sa_np1_id", label: "ID Card", ...sampleDocumentNode()},
-        {id: "sa_ah1_doc0", label: "Form 0", ...sampleLegalDocumentNode()},
-        {id: "sa_bo1_doc4", label: "Form 4", ...sampleLegalDocumentNode()},
+        {id: "sa_np1_id", label: "ID Card", nodeEditor:container["NodeEditorDocument"], ...sampleDocumentNode()},
+        {id: "sa_ah1_doc0", label: "Form 0", nodeEditor:container["NodeEditorDocument"], ...sampleLegalDocumentNode()},
+        {id: "sa_bo1_doc4", label: "Form 4", nodeEditor:container["NodeEditorDocument"], ...sampleLegalDocumentNode()},
        
         
       ]);
@@ -141,81 +148,48 @@
         {from: "sa_bo1", to:"sa_np1"},
         {from: "sa_np1", to:"sa_np1_id"},
         {from: "sa_ah1", to:"sa_ah1_doc0"},
-          {from: "sa_bo1", to:"sa_bo1_doc4"},
+        {from: "sa_bo1", to:"sa_bo1_doc4"},
       ]);
 
     }
 
     // Event handlers 
-
-    function nodeUpdated(event) {
-      nodes.update(event.detail.node);
-    }
-
-    function edgeUpdated(event) {
-      edges.update(event.detail.edge);
-    }
-
     function fit() {
       network.fit();
-
     }
 
 </script>
 
 <style>
-.editZone {
-    position:absolute;
-    width:100%;
-   
-    z-index:99; 
-    opacity:0.8; 
-  }
+  .editZone {
+      position:absolute;
+      width:100%;
+    
+      z-index:99; 
+      opacity:0.8; 
+    }
 
-	.graph {
-    position: absolute;
-    top: 0px;
-    left:-2px;
-	  width: 101%;
-    height:400px;
-  
-  }
+    .graph {
+      position: absolute;
+      top: 0px;
+      left:-2px;
+      width: 101%;
+      height:400px;
+    }
 </style>
-
-
-<!-- link rel='stylesheet' href='/test.css' -->
-
-<!-- <p>Selected nodes are {JSON.stringify(selection)}</p>
-
-<p>Selected node 1 of {nodesSelected} {JSON.stringify(node1)}</p>
-
-<p>Selected node 2 of {nodesSelected} {JSON.stringify(node2)}</p>
-
-<p>Selected edge 1  {JSON.stringify(edge1)}</p>
--->
-
 
 
 <svelte:window bind:innerHeight={inh} innerWidth={inw}/>
 
-
-
 <div class="l0 editZone">
+
 <button on:click={fit}>Center</button>
-{#if canEditEdge}
-  <EdgeEditor edge={edge1[0]} on:message={edgeUpdated}></EdgeEditor>
-{/if}
 
-{#if canEditNode}
-  <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
-  <svelte:component this={nodeEditor} node={node1[0]} on:message={nodeUpdated}></svelte:component>
-{/if}
-
+<!-- <GraphData></GraphData> -->
 {#if canAddNode}
   <button on:click={addNewNode}>New node</button>
-   <button on:click={addNewDocumentNode}>New document node</button>
-   <button on:click={addNewSingleAccount}>New Single Account</button>
-   
+  <button on:click={addNewDocumentNode}>New document node</button>
+  <button on:click={addNewSingleAccount}>New Single Account</button> 
 {/if}
 
 {#if canDeleteNodes}
@@ -229,6 +203,16 @@
 {#if canDeleteEdge}
   <button on:click={deleteEdge}>Delete Edge</button>
 {/if}
+<br/>
+{#if canEditEdge}
+  <EdgeEditor edge={edge1[0]}></EdgeEditor>
+{/if}
+
+{#if canEditNode}
+  <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
+  <svelte:component this={nodeEditor} node={node1[0]} ></svelte:component>
+{/if}
+
 </div>
 
 <div id ="mynet" class="graph" style="height:{inh+1}px">

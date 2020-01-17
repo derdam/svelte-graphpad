@@ -1,50 +1,30 @@
 <script>
    
-   import { createEventDispatcher } from 'svelte';
+   import { updateNode } from './GraphStore.js';
 
-  let files = [];
-  const changed = (event)=>{
-		console.log('changed', event)
-        files = event.target.files;
-        node.image = window.URL.createObjectURL(files[0]);
-	}
+   export let node;
 
-    export let node;
+    $: { updateNode(node); }
 
-    const dispatch = createEventDispatcher();
+    let files = [];
+    const changed = (event)=>{
+            console.log('changed', event)
+            files = event.target.files;
+            node.image = window.URL.createObjectURL(files[0]);
+        }
 
-    //  $: { updateNode(node); }
-
-    function updateNode(node) {
-    dispatch('message', {
-            node: node
-        });
-    };
-
-    function sayHello() {
-        updateNode(node)
-    }
-
-      $: { updateNode(node); }
+    $: { updateNode(node); }
 
 </script>
 
-
-
 {#if node}
-    <p>Node.id : {node.id}</p>
-    <input type="text" bind:value={node.label} />
-     <input type="text" bind:value={node.image} />
-     <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
-    <p>New label: {node.label}</p>
-<input
+    <input
 		type="file"
 		accept="image/*"
 		class="w-full h-full cursor-pointer"
 		bind:files
 		on:change={changed}
-/>
-   <!-- <button on:click={sayHello}>Submit</button> -->
-
-   
+    />
+    <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
+    <input type="text" bind:value={node.label} />
 {/if}

@@ -83,3 +83,9 @@ Then, from within your project folder:
 npm run build
 surge public my-project.surge.sh
 ```
+
+
+
+https://www.atlassian.com/fr/git/tutorials/using-branches/git-merge
+
+
