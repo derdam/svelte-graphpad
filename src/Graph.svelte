@@ -2,7 +2,7 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   import { nodes, edges, addNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
+   import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
@@ -73,10 +73,10 @@
         selection = params;
     });
 
-   //network.on("stabilized", function() {network.fit(); });
 
 
-   setTimeout(() => {
+
+    setTimeout(() => {
           network.fit();
         }, 1000);
   
