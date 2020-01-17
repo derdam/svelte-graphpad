@@ -1061,9 +1061,9 @@ var app = (function () {
     			t3 = space();
     			button2 = element("button");
     			button2.textContent = "New Single Account";
-    			add_location(button0, file$3, 189, 2, 4900);
-    			add_location(button1, file$3, 190, 2, 4950);
-    			add_location(button2, file$3, 191, 2, 5017);
+    			add_location(button0, file$3, 189, 2, 4944);
+    			add_location(button1, file$3, 190, 2, 4994);
+    			add_location(button2, file$3, 191, 2, 5061);
 
     			dispose = [
     				listen_dev(button0, "click", /*addNewNode*/ ctx[14], false, false, false),
@@ -1113,7 +1113,7 @@ var app = (function () {
     			button = element("button");
     			t0 = text("Delete node");
     			t1 = text(t1_value);
-    			add_location(button, file$3, 195, 2, 5115);
+    			add_location(button, file$3, 195, 2, 5159);
     			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[13], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1150,7 +1150,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Add Edge";
-    			add_location(button, file$3, 199, 2, 5224);
+    			add_location(button, file$3, 199, 2, 5268);
     			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[11], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1183,7 +1183,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Delete Edge";
-    			add_location(button, file$3, 203, 2, 5301);
+    			add_location(button, file$3, 203, 2, 5345);
     			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1382,14 +1382,14 @@ var app = (function () {
     			if (if_block5) if_block5.c();
     			t8 = space();
     			div1 = element("div");
-    			add_location(button, file$3, 185, 0, 4808);
-    			add_location(br, file$3, 205, 0, 5358);
+    			add_location(button, file$3, 185, 0, 4852);
+    			add_location(br, file$3, 205, 0, 5402);
     			attr_dev(div0, "class", "l0 editZone svelte-1f5wwi3");
-    			add_location(div0, file$3, 183, 0, 4781);
+    			add_location(div0, file$3, 183, 0, 4825);
     			attr_dev(div1, "id", "mynet");
     			attr_dev(div1, "class", "graph svelte-1f5wwi3");
     			set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
-    			add_location(div1, file$3, 217, 0, 5619);
+    			add_location(div1, file$3, 217, 0, 5663);
 
     			dispose = [
     				listen_dev(window, "resize", /*onwindowresize*/ ctx[25]),
@@ -1657,7 +1657,13 @@ var app = (function () {
     	
 
     	function addNewDocumentNode() {
-    		addNewNode(sampleLegalDocumentNode(), {});
+    		addNewNode(
+    			{
+    				...sampleDocumentNode(),
+    				nodeEditor: container["NodeEditorDocument"]
+    			},
+    			{}
+    		);
     	}
 
     	function addNewSingleAccount() {

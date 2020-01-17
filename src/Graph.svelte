@@ -121,7 +121,7 @@
     }
 
     function addNewDocumentNode() {
-      addNewNode(sampleLegalDocumentNode(),
+      addNewNode({...sampleDocumentNode(), nodeEditor:container["NodeEditorDocument"]},
       {});
     }
 
