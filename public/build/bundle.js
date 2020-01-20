@@ -463,7 +463,8 @@ var app = (function () {
 
     let views = {
         Document: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
-
+      
+        
     };
 
     const buildNodeView = (node) => {
