@@ -1,6 +1,6 @@
 <script>
    
-   import {  updateNode } from './GraphStore.js';
+   import {  updateNode, addNode, addEdge } from './GraphStore.js';
 
     export let node;
 
@@ -11,8 +11,11 @@
            
             files = event.target.files;
             node.image = window.URL.createObjectURL(files[0]);
-             console.log('changed' , node.image)
-             
+           
+
+            let newNode = addNode({label:'Validate'});
+              console.log('added' , newNode)
+             let newEdge = addEdge({ from: node.id, to: newNode[0]});
         }
 
 
