@@ -3,6 +3,7 @@
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
    import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
+   import { buildNodeView } from './NodeView.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
@@ -17,7 +18,8 @@
 
    let selection = {nodes: [], edges: []};
 
-   let nodeEditor = NodeEditor;
+
+   let nodeEditor2 = NodeEditor;
 
    $: nodesSelected = selection.nodes.length;
    $: node1 = nodes.get(selection.nodes.slice(0,1));
@@ -31,9 +33,19 @@
    $: canEditNode = selection.nodes.length === 1;
    $: canEditEdge = selection.edges.length === 1 && !canEditNode;
 
-  $: {
+
+
+    $: {
     if (canEditNode) {
-        nodeEditor = node1[0].nodeEditor ? node1[0].nodeEditor : NodeEditor;
+    
+        let editor = NodeEditor;
+
+        if (node1[0].nodeClass)
+        {
+           editor = container["NodeEditor"+node1[0].nodeClass]
+        } 
+        
+        nodeEditor2 = editor;
     }
   }
 
@@ -73,7 +85,23 @@
         selection = params;
     });
 
+    let nodeUpdating = false;
+    nodes.on('update', function (event, properties, senderId) { 
+     if (!nodeUpdating) {
+        // alert(JSON.stringify(properties));
+        nodeUpdating = true;
+         let view = buildNodeView(properties.data[0]);
+     
+        let node = {...properties.data[0], ...view};
+       
+       updateNode(node);
+       // alert(JSON.stringify(node));
+     
+       nodeUpdating = false;
+     }
+    });
 
+    
 
 
     setTimeout(() => {
@@ -121,7 +149,7 @@
     }
 
     function addNewDocumentNode() {
-      addNewNode({...sampleDocumentNode(), nodeEditor:container["NodeEditorDocument"]},
+      addNewNode({...sampleDocumentNode(), nodeClass:"Document"},
       {});
     }
 
@@ -135,9 +163,9 @@
         {id: "sa_ah1", label: "Account\nHolder"},
         {id: "sa_bo1", label: "Beneficial\nOwner"},
         {id: "sa_np1", label: "Natural\nPerson"},
-        {id: "sa_np1_id", label: "ID Card", nodeEditor:container["NodeEditorDocument"], ...sampleDocumentNode()},
-        {id: "sa_ah1_doc0", label: "Form 0", nodeEditor:container["NodeEditorDocument"], ...sampleLegalDocumentNode()},
-        {id: "sa_bo1_doc4", label: "Form 4", nodeEditor:container["NodeEditorDocument"], ...sampleLegalDocumentNode()},
+        {id: "sa_np1_id", label: "ID Card", nodeClass:"Document", ...sampleDocumentNode()},
+        {id: "sa_ah1_doc0", label: "Form 0", nodeClass:"Document", ...sampleLegalDocumentNode()},
+        {id: "sa_bo1_doc4", label: "Form 4",nodeClass:"Document", ...sampleLegalDocumentNode()},
        
         
       ]);
@@ -210,7 +238,7 @@
 
 {#if canEditNode}
   <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
-  <svelte:component this={nodeEditor} node={node1[0]} ></svelte:component>
+  <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
 {/if}
 
 </div>
