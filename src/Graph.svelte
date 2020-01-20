@@ -7,13 +7,17 @@
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
+   import NodeEditorValidator from './NodeEditorValidator.svelte';
+   import NodeEditorValidatorRejected from './NodeEditorValidatorRejected.svelte';
    import GraphData from './GraphData.svelte';
 
 
   let container = { 
      EdgeEditor: EdgeEditor,
      NodeEditor: NodeEditor,
-     NodeEditorDocument: NodeEditorDocument
+     NodeEditorDocument: NodeEditorDocument,
+     NodeEditorValidator: NodeEditorValidator,
+     NodeEditorValidatorRejected: NodeEditorValidatorRejected
    }
 
    let selection = {nodes: [], edges: []};
