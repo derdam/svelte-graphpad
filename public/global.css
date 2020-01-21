@@ -68,11 +68,11 @@ input, button, select, textarea {
 	border-radius: 2px;
 }
 
-input {
+input, textarea {
 	color: #ccc;
 }
 
-input {
+input, textarea {
 	background-color: var(--surface-control);
 	border-style: none;
 }

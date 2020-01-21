@@ -9,7 +9,8 @@
 </script>
 
 {#if node}
-  Label&nbsp;<input type="text" bind:value={node.label} />
+<div>
+  Label&nbsp;<textarea bind:value={node.label} />
   Class&nbsp;<input type="text" bind:value={node.nodeClass} />
-   <!-- <button on:click={sayHello}>Submit</button> -->
+</div>
 {/if}

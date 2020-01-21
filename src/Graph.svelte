@@ -195,8 +195,9 @@
 <style>
   .editZone {
       position:absolute;
-      width:100%;
-    
+      left:80%;
+      width:20%;
+     
       z-index:99; 
       opacity:0.8; 
     }
@@ -213,9 +214,10 @@
 
 <svelte:window bind:innerHeight={inh} innerWidth={inw}/>
 
-<div class="l0 editZone">
+<div class="l0 editZone" style="height:{inh+1}px">
 
 <button on:click={fit}>Center</button>
+<br/>
 
 <!-- <GraphData></GraphData> -->
 {#if canAddNode}
