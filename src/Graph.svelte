@@ -246,15 +246,18 @@
     <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
   {/if}
 
-  {#if canAddEdge}
+  
+  </Tool>
+ {/if}
+
+{#if canAddEdge | canEditEdge | canDeleteEdge}
+ {#if canAddEdge}
     <button on:click={addNewEdge}>Add Edge</button>
   {/if}
 
   {#if canDeleteEdge}
     <button on:click={deleteEdge}>Delete Edge</button>
   {/if}
-  </Tool>
- {/if}
 
 
   {#if canEditEdge}
@@ -262,7 +265,7 @@
       <EdgeEditor edge={edge1[0]}></EdgeEditor>
     </Tool>
   {/if}
-
+{/if}
   {#if canEditNode}
     <Tool title = "Node">
       <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
