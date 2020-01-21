@@ -10,8 +10,9 @@
 
 {#if node}
 <div>
-  <p><textarea bind:value={node.label} /></p>
-  <p>Class&nbsp;<input type="text" bind:value={node.nodeClass} /></p>
+ <p><input type="text" bind:value={node.nodeClass} placeholder="Class"/></p>
+  <p><textarea bind:value={node.label} placeholder="Label" /></p>
+ 
   <slot></slot>
 </div>
 {/if}

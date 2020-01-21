@@ -533,12 +533,11 @@ var app = (function () {
     function create_if_block(ctx) {
     	let div;
     	let p0;
-    	let textarea;
+    	let input;
     	let t0;
     	let p1;
+    	let textarea;
     	let t1;
-    	let input;
-    	let t2;
     	let current;
     	let dispose;
     	const default_slot_template = /*$$slots*/ ctx[2].default;
@@ -548,36 +547,36 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			p0 = element("p");
-    			textarea = element("textarea");
+    			input = element("input");
     			t0 = space();
     			p1 = element("p");
-    			t1 = text("Class ");
-    			input = element("input");
-    			t2 = space();
+    			textarea = element("textarea");
+    			t1 = space();
     			if (default_slot) default_slot.c();
-    			add_location(textarea, file, 12, 5, 144);
-    			add_location(p0, file, 12, 2, 141);
     			attr_dev(input, "type", "text");
-    			add_location(input, file, 13, 16, 201);
-    			add_location(p1, file, 13, 2, 187);
+    			attr_dev(input, "placeholder", "Class");
+    			add_location(input, file, 12, 4, 143);
+    			add_location(p0, file, 12, 1, 140);
+    			attr_dev(textarea, "placeholder", "Label");
+    			add_location(textarea, file, 13, 5, 221);
+    			add_location(p1, file, 13, 2, 218);
     			add_location(div, file, 11, 0, 133);
 
     			dispose = [
-    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[3]),
-    				listen_dev(input, "input", /*input_input_handler*/ ctx[4])
+    				listen_dev(input, "input", /*input_input_handler*/ ctx[3]),
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[4])
     			];
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
     			append_dev(div, p0);
-    			append_dev(p0, textarea);
-    			set_input_value(textarea, /*node*/ ctx[0].label);
+    			append_dev(p0, input);
+    			set_input_value(input, /*node*/ ctx[0].nodeClass);
     			append_dev(div, t0);
     			append_dev(div, p1);
-    			append_dev(p1, t1);
-    			append_dev(p1, input);
-    			set_input_value(input, /*node*/ ctx[0].nodeClass);
-    			append_dev(div, t2);
+    			append_dev(p1, textarea);
+    			set_input_value(textarea, /*node*/ ctx[0].label);
+    			append_dev(div, t1);
 
     			if (default_slot) {
     				default_slot.m(div, null);
@@ -586,12 +585,12 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*node*/ 1) {
-    				set_input_value(textarea, /*node*/ ctx[0].label);
-    			}
-
     			if (dirty & /*node*/ 1 && input.value !== /*node*/ ctx[0].nodeClass) {
     				set_input_value(input, /*node*/ ctx[0].nodeClass);
+    			}
+
+    			if (dirty & /*node*/ 1) {
+    				set_input_value(textarea, /*node*/ ctx[0].label);
     			}
 
     			if (default_slot && default_slot.p && dirty & /*$$scope*/ 2) {
@@ -700,13 +699,13 @@ var app = (function () {
 
     	let { $$slots = {}, $$scope } = $$props;
 
-    	function textarea_input_handler() {
-    		node.label = this.value;
+    	function input_input_handler() {
+    		node.nodeClass = this.value;
     		$$invalidate(0, node);
     	}
 
-    	function input_input_handler() {
-    		node.nodeClass = this.value;
+    	function textarea_input_handler() {
+    		node.label = this.value;
     		$$invalidate(0, node);
     	}
 
@@ -731,7 +730,7 @@ var app = (function () {
     		}
     	};
 
-    	return [node, $$scope, $$slots, textarea_input_handler, input_input_handler];
+    	return [node, $$scope, $$slots, input_input_handler, textarea_input_handler];
     }
 
     class NodeEditor extends SvelteComponentDev {
@@ -1142,30 +1141,29 @@ var app = (function () {
     // (23:0) {#if node}
     function create_if_block$3(ctx) {
     	let p;
-    	let t0;
     	let input;
-    	let t1;
+    	let t0;
     	let button0;
-    	let t3;
+    	let t2;
     	let button1;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			p = element("p");
-    			t0 = text("Reason: ");
     			input = element("input");
-    			t1 = space();
+    			t0 = space();
     			button0 = element("button");
     			button0.textContent = "Approve";
-    			t3 = space();
+    			t2 = space();
     			button1 = element("button");
     			button1.textContent = "Reject";
     			attr_dev(input, "type", "text");
-    			add_location(input, file$3, 23, 13, 453);
+    			attr_dev(input, "placeholder", "Reason");
+    			add_location(input, file$3, 23, 5, 445);
     			add_location(p, file$3, 23, 2, 442);
-    			add_location(button0, file$3, 24, 4, 502);
-    			add_location(button1, file$3, 25, 4, 550);
+    			add_location(button0, file$3, 24, 4, 516);
+    			add_location(button1, file$3, 25, 4, 564);
 
     			dispose = [
     				listen_dev(input, "input", /*input_input_handler*/ ctx[4]),
@@ -1175,12 +1173,11 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
-    			append_dev(p, t0);
     			append_dev(p, input);
     			set_input_value(input, /*reason*/ ctx[1]);
-    			insert_dev(target, t1, anchor);
+    			insert_dev(target, t0, anchor);
     			insert_dev(target, button0, anchor);
-    			insert_dev(target, t3, anchor);
+    			insert_dev(target, t2, anchor);
     			insert_dev(target, button1, anchor);
     		},
     		p: function update(ctx, dirty) {
@@ -1190,9 +1187,9 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(button0);
-    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(t2);
     			if (detaching) detach_dev(button1);
     			run_all(dispose);
     		}

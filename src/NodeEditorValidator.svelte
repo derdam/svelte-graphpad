@@ -21,7 +21,7 @@ let reason;
 </script>
 
 {#if node}
-  <p>Reason: <input type="text" bind:value={reason}/></p>
+  <p><input type="text" bind:value={reason} placeholder="Reason" /></p>
     <button on:click={approve}>Approve</button>
     <button on:click={reject}>Reject</button>
 
