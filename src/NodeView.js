@@ -1,6 +1,7 @@
 
 let views = {
-    Document: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
+    Document: {view: { shape:'image' }, props: [{image:'./example-document.jpg'}, { size:45}]}
+  // , Validator: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
   
     
 }

@@ -4,6 +4,12 @@ var app = (function () {
     'use strict';
 
     function noop() { }
+    function assign(tar, src) {
+        // @ts-ignore
+        for (const k in src)
+            tar[k] = src[k];
+        return tar;
+    }
     function add_location(element, file, line, column, char) {
         element.__svelte_meta = {
             loc: { file, line, column, char }
@@ -23,6 +29,32 @@ var app = (function () {
     }
     function safe_not_equal(a, b) {
         return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+    }
+    function create_slot(definition, ctx, $$scope, fn) {
+        if (definition) {
+            const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
+            return definition[0](slot_ctx);
+        }
+    }
+    function get_slot_context(definition, ctx, $$scope, fn) {
+        return definition[1] && fn
+            ? assign($$scope.ctx.slice(), definition[1](fn(ctx)))
+            : $$scope.ctx;
+    }
+    function get_slot_changes(definition, $$scope, dirty, fn) {
+        if (definition[2] && fn) {
+            const lets = definition[2](fn(dirty));
+            if (typeof $$scope.dirty === 'object') {
+                const merged = [];
+                const len = Math.max($$scope.dirty.length, lets.length);
+                for (let i = 0; i < len; i += 1) {
+                    merged[i] = $$scope.dirty[i] | lets[i];
+                }
+                return merged;
+            }
+            return $$scope.dirty | lets;
+        }
+        return $$scope.dirty;
     }
 
     function append(target, node) {
@@ -69,6 +101,9 @@ var app = (function () {
     }
     function set_style(node, key, value, important) {
         node.style.setProperty(key, value, important ? 'important' : '');
+    }
+    function toggle_class(element, name, toggle) {
+        element.classList[toggle ? 'add' : 'remove'](name);
     }
     function custom_event(type, detail) {
         const e = document.createEvent('CustomEvent');
@@ -462,7 +497,8 @@ var app = (function () {
     addEdge({from:0, to:2} );
 
     let views = {
-        Document: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
+        Document: {view: { shape:'image' }, props: [{image:'./example-document.jpg'}, { size:45}]}
+      // , Validator: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
       
         
     };
@@ -500,7 +536,11 @@ var app = (function () {
     	let textarea;
     	let t1;
     	let input;
+    	let t2;
+    	let current;
     	let dispose;
+    	const default_slot_template = /*$$slots*/ ctx[2].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[1], null);
 
     	const block = {
     		c: function create() {
@@ -509,14 +549,16 @@ var app = (function () {
     			textarea = element("textarea");
     			t1 = text("\n  Class ");
     			input = element("input");
+    			t2 = space();
+    			if (default_slot) default_slot.c();
     			add_location(textarea, file, 12, 13, 152);
     			attr_dev(input, "type", "text");
     			add_location(input, file, 13, 13, 202);
     			add_location(div, file, 11, 0, 133);
 
     			dispose = [
-    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[1]),
-    				listen_dev(input, "input", /*input_input_handler*/ ctx[2])
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[3]),
+    				listen_dev(input, "input", /*input_input_handler*/ ctx[4])
     			];
     		},
     		m: function mount(target, anchor) {
@@ -527,6 +569,13 @@ var app = (function () {
     			append_dev(div, t1);
     			append_dev(div, input);
     			set_input_value(input, /*node*/ ctx[0].nodeClass);
+    			append_dev(div, t2);
+
+    			if (default_slot) {
+    				default_slot.m(div, null);
+    			}
+
+    			current = true;
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*node*/ 1) {
@@ -536,9 +585,23 @@ var app = (function () {
     			if (dirty & /*node*/ 1 && input.value !== /*node*/ ctx[0].nodeClass) {
     				set_input_value(input, /*node*/ ctx[0].nodeClass);
     			}
+
+    			if (default_slot && default_slot.p && dirty & /*$$scope*/ 2) {
+    				default_slot.p(get_slot_context(default_slot_template, ctx, /*$$scope*/ ctx[1], null), get_slot_changes(default_slot_template, /*$$scope*/ ctx[1], dirty, null));
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(default_slot, local);
+    			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
+    			if (default_slot) default_slot.d(detaching);
     			run_all(dispose);
     		}
     	};
@@ -556,6 +619,7 @@ var app = (function () {
 
     function create_fragment(ctx) {
     	let if_block_anchor;
+    	let current;
     	let if_block = /*node*/ ctx[0] && create_if_block(ctx);
 
     	const block = {
@@ -569,23 +633,38 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
+    			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			if (/*node*/ ctx[0]) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
+    					transition_in(if_block, 1);
     				} else {
     					if_block = create_if_block(ctx);
     					if_block.c();
+    					transition_in(if_block, 1);
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
     				}
     			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
     			}
     		},
-    		i: noop,
-    		o: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
     		d: function destroy(detaching) {
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
@@ -611,6 +690,8 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<NodeEditor> was created with unknown prop '${key}'`);
     	});
 
+    	let { $$slots = {}, $$scope } = $$props;
+
     	function textarea_input_handler() {
     		node.label = this.value;
     		$$invalidate(0, node);
@@ -623,6 +704,7 @@ var app = (function () {
 
     	$$self.$set = $$props => {
     		if ("node" in $$props) $$invalidate(0, node = $$props.node);
+    		if ("$$scope" in $$props) $$invalidate(1, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => {
@@ -641,7 +723,7 @@ var app = (function () {
     		}
     	};
 
-    	return [node, textarea_input_handler, input_input_handler];
+    	return [node, $$scope, $$slots, textarea_input_handler, input_input_handler];
     }
 
     class NodeEditor extends SvelteComponentDev {
@@ -678,27 +760,30 @@ var app = (function () {
 
     // (13:0) {#if edge}
     function create_if_block$1(ctx) {
-    	let input;
+    	let t;
+    	let textarea;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			input = element("input");
-    			attr_dev(input, "type", "text");
-    			add_location(input, file$1, 13, 4, 143);
-    			dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[1]);
+    			t = text("Label\n    ");
+    			textarea = element("textarea");
+    			add_location(textarea, file$1, 14, 4, 149);
+    			dispose = listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[1]);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, input, anchor);
-    			set_input_value(input, /*edge*/ ctx[0].label);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, textarea, anchor);
+    			set_input_value(textarea, /*edge*/ ctx[0].label);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*edge*/ 1 && input.value !== /*edge*/ ctx[0].label) {
-    				set_input_value(input, /*edge*/ ctx[0].label);
+    			if (dirty & /*edge*/ 1) {
+    				set_input_value(textarea, /*edge*/ ctx[0].label);
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(input);
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(textarea);
     			dispose();
     		}
     	};
@@ -771,7 +856,7 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<EdgeEditor> was created with unknown prop '${key}'`);
     	});
 
-    	function input_input_handler() {
+    	function textarea_input_handler() {
     		edge.label = this.value;
     		$$invalidate(0, edge);
     	}
@@ -796,7 +881,7 @@ var app = (function () {
     		}
     	};
 
-    	return [edge, input_input_handler];
+    	return [edge, textarea_input_handler];
     }
 
     class EdgeEditor extends SvelteComponentDev {
@@ -1048,85 +1133,59 @@ var app = (function () {
 
     // (23:0) {#if node}
     function create_if_block$3(ctx) {
-    	let t0;
-    	let input0;
-    	let t1;
-    	let input1;
-    	let t2;
     	let p;
+    	let t0;
+    	let input;
+    	let t1;
     	let button0;
-    	let t4;
-    	let input2;
+    	let t3;
     	let button1;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			t0 = text("Label ");
-    			input0 = element("input");
-    			t1 = text("\n  Class ");
-    			input1 = element("input");
-    			t2 = space();
     			p = element("p");
+    			t0 = text("Reason: ");
+    			input = element("input");
+    			t1 = space();
     			button0 = element("button");
     			button0.textContent = "Approve";
-    			t4 = text("\n    Reason: ");
-    			input2 = element("input");
+    			t3 = space();
     			button1 = element("button");
     			button1.textContent = "Reject";
-    			attr_dev(input0, "type", "text");
-    			add_location(input0, file$3, 23, 13, 469);
-    			attr_dev(input1, "type", "text");
-    			add_location(input1, file$3, 24, 13, 528);
-    			add_location(button0, file$3, 26, 4, 588);
-    			attr_dev(input2, "type", "text");
-    			add_location(input2, file$3, 27, 12, 644);
-    			add_location(button1, file$3, 27, 52, 684);
-    			add_location(p, file$3, 25, 2, 580);
+    			attr_dev(input, "type", "text");
+    			add_location(input, file$3, 23, 13, 469);
+    			add_location(p, file$3, 23, 2, 458);
+    			add_location(button0, file$3, 24, 4, 518);
+    			add_location(button1, file$3, 25, 4, 566);
 
     			dispose = [
-    				listen_dev(input0, "input", /*input0_input_handler*/ ctx[4]),
-    				listen_dev(input1, "input", /*input1_input_handler*/ ctx[5]),
+    				listen_dev(input, "input", /*input_input_handler*/ ctx[4]),
     				listen_dev(button0, "click", /*approve*/ ctx[2], false, false, false),
-    				listen_dev(input2, "input", /*input2_input_handler*/ ctx[6]),
     				listen_dev(button1, "click", /*reject*/ ctx[3], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, input0, anchor);
-    			set_input_value(input0, /*node*/ ctx[0].label);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, input1, anchor);
-    			set_input_value(input1, /*node*/ ctx[0].nodeClass);
-    			insert_dev(target, t2, anchor);
     			insert_dev(target, p, anchor);
-    			append_dev(p, button0);
-    			append_dev(p, t4);
-    			append_dev(p, input2);
-    			set_input_value(input2, /*reason*/ ctx[1]);
-    			append_dev(p, button1);
+    			append_dev(p, t0);
+    			append_dev(p, input);
+    			set_input_value(input, /*reason*/ ctx[1]);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, button0, anchor);
+    			insert_dev(target, t3, anchor);
+    			insert_dev(target, button1, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*node*/ 1 && input0.value !== /*node*/ ctx[0].label) {
-    				set_input_value(input0, /*node*/ ctx[0].label);
-    			}
-
-    			if (dirty & /*node*/ 1 && input1.value !== /*node*/ ctx[0].nodeClass) {
-    				set_input_value(input1, /*node*/ ctx[0].nodeClass);
-    			}
-
-    			if (dirty & /*reason*/ 2 && input2.value !== /*reason*/ ctx[1]) {
-    				set_input_value(input2, /*reason*/ ctx[1]);
+    			if (dirty & /*reason*/ 2 && input.value !== /*reason*/ ctx[1]) {
+    				set_input_value(input, /*reason*/ ctx[1]);
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(input0);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(input1);
-    			if (detaching) detach_dev(t2);
     			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(button0);
+    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(button1);
     			run_all(dispose);
     		}
     	};
@@ -1222,17 +1281,7 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<NodeEditorValidator> was created with unknown prop '${key}'`);
     	});
 
-    	function input0_input_handler() {
-    		node.label = this.value;
-    		$$invalidate(0, node);
-    	}
-
-    	function input1_input_handler() {
-    		node.nodeClass = this.value;
-    		$$invalidate(0, node);
-    	}
-
-    	function input2_input_handler() {
+    	function input_input_handler() {
     		reason = this.value;
     		$$invalidate(1, reason);
     	}
@@ -1258,15 +1307,7 @@ var app = (function () {
     		}
     	};
 
-    	return [
-    		node,
-    		reason,
-    		approve,
-    		reject,
-    		input0_input_handler,
-    		input1_input_handler,
-    		input2_input_handler
-    	];
+    	return [node, reason, approve, reject, input_input_handler];
     }
 
     class NodeEditorValidator extends SvelteComponentDev {
@@ -1305,66 +1346,27 @@ var app = (function () {
 
     // (24:0) {#if node}
     function create_if_block$4(ctx) {
-    	let t0;
-    	let input0;
-    	let t1;
-    	let input1;
-    	let t2;
     	let p;
     	let button;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			t0 = text("Label ");
-    			input0 = element("input");
-    			t1 = text("\n  Class ");
-    			input1 = element("input");
-    			t2 = space();
     			p = element("p");
     			button = element("button");
     			button.textContent = "Acknowledge";
-    			attr_dev(input0, "type", "text");
-    			add_location(input0, file$4, 24, 13, 422);
-    			attr_dev(input1, "type", "text");
-    			add_location(input1, file$4, 25, 13, 481);
-    			add_location(button, file$4, 27, 4, 541);
-    			add_location(p, file$4, 26, 2, 533);
-
-    			dispose = [
-    				listen_dev(input0, "input", /*input0_input_handler*/ ctx[3]),
-    				listen_dev(input1, "input", /*input1_input_handler*/ ctx[4]),
-    				listen_dev(button, "click", /*acknowledge*/ ctx[1], false, false, false)
-    			];
+    			add_location(button, file$4, 26, 4, 421);
+    			add_location(p, file$4, 25, 2, 413);
+    			dispose = listen_dev(button, "click", /*acknowledge*/ ctx[1], false, false, false);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, input0, anchor);
-    			set_input_value(input0, /*node*/ ctx[0].label);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, input1, anchor);
-    			set_input_value(input1, /*node*/ ctx[0].nodeClass);
-    			insert_dev(target, t2, anchor);
     			insert_dev(target, p, anchor);
     			append_dev(p, button);
     		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*node*/ 1 && input0.value !== /*node*/ ctx[0].label) {
-    				set_input_value(input0, /*node*/ ctx[0].label);
-    			}
-
-    			if (dirty & /*node*/ 1 && input1.value !== /*node*/ ctx[0].nodeClass) {
-    				set_input_value(input1, /*node*/ ctx[0].nodeClass);
-    			}
-    		},
+    		p: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(input0);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(input1);
-    			if (detaching) detach_dev(t2);
     			if (detaching) detach_dev(p);
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -1451,16 +1453,6 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<NodeEditorValidatorRejected> was created with unknown prop '${key}'`);
     	});
 
-    	function input0_input_handler() {
-    		node.label = this.value;
-    		$$invalidate(0, node);
-    	}
-
-    	function input1_input_handler() {
-    		node.nodeClass = this.value;
-    		$$invalidate(0, node);
-    	}
-
     	$$self.$set = $$props => {
     		if ("node" in $$props) $$invalidate(0, node = $$props.node);
     	};
@@ -1482,7 +1474,7 @@ var app = (function () {
     		}
     	};
 
-    	return [node, acknowledge, reason, input0_input_handler, input1_input_handler];
+    	return [node, acknowledge];
     }
 
     class NodeEditorValidatorRejected extends SvelteComponentDev {
@@ -1514,10 +1506,445 @@ var app = (function () {
     	}
     }
 
-    /* src/Graph.svelte generated by Svelte v3.16.6 */
-    const file$5 = "src/Graph.svelte";
+    /* src/AudioPlayer.svelte generated by Svelte v3.16.6 */
+    const file$5 = "src/AudioPlayer.svelte";
 
-    // (223:0) {#if canAddNode}
+    function create_fragment$5(ctx) {
+    	let article;
+    	let h2;
+    	let t0;
+    	let t1;
+    	let p;
+    	let strong;
+    	let t2;
+    	let t3;
+    	let t4;
+    	let t5;
+    	let audio_1;
+    	let audio_1_src_value;
+    	let audio_1_is_paused = true;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			article = element("article");
+    			h2 = element("h2");
+    			t0 = text(/*title*/ ctx[1]);
+    			t1 = space();
+    			p = element("p");
+    			strong = element("strong");
+    			t2 = text(/*composer*/ ctx[2]);
+    			t3 = text(" / performed by ");
+    			t4 = text(/*performer*/ ctx[3]);
+    			t5 = space();
+    			audio_1 = element("audio");
+    			attr_dev(h2, "class", "svelte-18j0ib");
+    			add_location(h2, file$5, 48, 1, 831);
+    			add_location(strong, file$5, 49, 4, 852);
+    			attr_dev(p, "class", "svelte-18j0ib");
+    			add_location(p, file$5, 49, 1, 849);
+    			audio_1.controls = true;
+    			if (audio_1.src !== (audio_1_src_value = /*src*/ ctx[0])) attr_dev(audio_1, "src", audio_1_src_value);
+    			attr_dev(audio_1, "class", "svelte-18j0ib");
+    			add_location(audio_1, file$5, 51, 1, 913);
+    			attr_dev(article, "class", "svelte-18j0ib");
+    			toggle_class(article, "playing", !/*paused*/ ctx[5]);
+    			add_location(article, file$5, 47, 0, 796);
+
+    			dispose = [
+    				listen_dev(audio_1, "play", /*audio_1_play_pause_handler*/ ctx[8]),
+    				listen_dev(audio_1, "pause", /*audio_1_play_pause_handler*/ ctx[8]),
+    				listen_dev(audio_1, "play", /*stopOthers*/ ctx[6], false, false, false),
+    				listen_dev(audio_1, "ended", next, false, false, false)
+    			];
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, article, anchor);
+    			append_dev(article, h2);
+    			append_dev(h2, t0);
+    			append_dev(article, t1);
+    			append_dev(article, p);
+    			append_dev(p, strong);
+    			append_dev(strong, t2);
+    			append_dev(p, t3);
+    			append_dev(p, t4);
+    			append_dev(article, t5);
+    			append_dev(article, audio_1);
+    			/*audio_1_binding*/ ctx[7](audio_1);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*title*/ 2) set_data_dev(t0, /*title*/ ctx[1]);
+    			if (dirty & /*composer*/ 4) set_data_dev(t2, /*composer*/ ctx[2]);
+    			if (dirty & /*performer*/ 8) set_data_dev(t4, /*performer*/ ctx[3]);
+
+    			if (dirty & /*src*/ 1 && audio_1.src !== (audio_1_src_value = /*src*/ ctx[0])) {
+    				attr_dev(audio_1, "src", audio_1_src_value);
+    			}
+
+    			if (dirty & /*paused*/ 32 && audio_1_is_paused !== (audio_1_is_paused = /*paused*/ ctx[5])) {
+    				audio_1[audio_1_is_paused ? "pause" : "play"]();
+    			}
+
+    			if (dirty & /*paused*/ 32) {
+    				toggle_class(article, "playing", !/*paused*/ ctx[5]);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(article);
+    			/*audio_1_binding*/ ctx[7](null);
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$5.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    const elements = new Set();
+
+    function next() {
+    	
+    }
+
+    function instance$5($$self, $$props, $$invalidate) {
+    	let { src } = $$props;
+    	let { title } = $$props;
+    	let { composer } = $$props;
+    	let { performer } = $$props;
+    	let audio;
+    	let paused = true;
+
+    	onMount(() => {
+    		elements.add(audio);
+    		return () => elements.delete(audio);
+    	});
+
+    	function stopOthers() {
+    		elements.forEach(element => {
+    			if (element !== audio) element.pause();
+    		});
+    	}
+
+    	const writable_props = ["src", "title", "composer", "performer"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<AudioPlayer> was created with unknown prop '${key}'`);
+    	});
+
+    	function audio_1_binding($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			$$invalidate(4, audio = $$value);
+    		});
+    	}
+
+    	function audio_1_play_pause_handler() {
+    		paused = this.paused;
+    		$$invalidate(5, paused);
+    	}
+
+    	$$self.$set = $$props => {
+    		if ("src" in $$props) $$invalidate(0, src = $$props.src);
+    		if ("title" in $$props) $$invalidate(1, title = $$props.title);
+    		if ("composer" in $$props) $$invalidate(2, composer = $$props.composer);
+    		if ("performer" in $$props) $$invalidate(3, performer = $$props.performer);
+    	};
+
+    	$$self.$capture_state = () => {
+    		return {
+    			src,
+    			title,
+    			composer,
+    			performer,
+    			audio,
+    			paused
+    		};
+    	};
+
+    	$$self.$inject_state = $$props => {
+    		if ("src" in $$props) $$invalidate(0, src = $$props.src);
+    		if ("title" in $$props) $$invalidate(1, title = $$props.title);
+    		if ("composer" in $$props) $$invalidate(2, composer = $$props.composer);
+    		if ("performer" in $$props) $$invalidate(3, performer = $$props.performer);
+    		if ("audio" in $$props) $$invalidate(4, audio = $$props.audio);
+    		if ("paused" in $$props) $$invalidate(5, paused = $$props.paused);
+    	};
+
+    	return [
+    		src,
+    		title,
+    		composer,
+    		performer,
+    		audio,
+    		paused,
+    		stopOthers,
+    		audio_1_binding,
+    		audio_1_play_pause_handler
+    	];
+    }
+
+    class AudioPlayer extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+
+    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {
+    			src: 0,
+    			title: 1,
+    			composer: 2,
+    			performer: 3
+    		});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "AudioPlayer",
+    			options,
+    			id: create_fragment$5.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || ({});
+
+    		if (/*src*/ ctx[0] === undefined && !("src" in props)) {
+    			console.warn("<AudioPlayer> was created without expected prop 'src'");
+    		}
+
+    		if (/*title*/ ctx[1] === undefined && !("title" in props)) {
+    			console.warn("<AudioPlayer> was created without expected prop 'title'");
+    		}
+
+    		if (/*composer*/ ctx[2] === undefined && !("composer" in props)) {
+    			console.warn("<AudioPlayer> was created without expected prop 'composer'");
+    		}
+
+    		if (/*performer*/ ctx[3] === undefined && !("performer" in props)) {
+    			console.warn("<AudioPlayer> was created without expected prop 'performer'");
+    		}
+    	}
+
+    	get src() {
+    		throw new Error("<AudioPlayer>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set src(value) {
+    		throw new Error("<AudioPlayer>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get title() {
+    		throw new Error("<AudioPlayer>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set title(value) {
+    		throw new Error("<AudioPlayer>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get composer() {
+    		throw new Error("<AudioPlayer>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set composer(value) {
+    		throw new Error("<AudioPlayer>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get performer() {
+    		throw new Error("<AudioPlayer>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set performer(value) {
+    		throw new Error("<AudioPlayer>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src/NodeEditorAudio.svelte generated by Svelte v3.16.6 */
+
+    const { console: console_1$2 } = globals;
+
+    // (15:0) {#if node}
+    function create_if_block$5(ctx) {
+    	let current;
+
+    	const audioplayer = new AudioPlayer({
+    			props: {
+    				src: "test.mp3",
+    				title: "Brown Paper Bag",
+    				composer: "Reprazent",
+    				performer: ""
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(audioplayer.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(audioplayer, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(audioplayer.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(audioplayer.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(audioplayer, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$5.name,
+    		type: "if",
+    		source: "(15:0) {#if node}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$6(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*node*/ ctx[0] && create_if_block$5(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (/*node*/ ctx[0]) {
+    				if (!if_block) {
+    					if_block = create_if_block$5(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				} else {
+    					transition_in(if_block, 1);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$6.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
+    	let { node } = $$props;
+    	const writable_props = ["node"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$2.warn(`<NodeEditorAudio> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$set = $$props => {
+    		if ("node" in $$props) $$invalidate(0, node = $$props.node);
+    	};
+
+    	$$self.$capture_state = () => {
+    		return { node };
+    	};
+
+    	$$self.$inject_state = $$props => {
+    		if ("node" in $$props) $$invalidate(0, node = $$props.node);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*node*/ 1) {
+    			 {
+    				updateNode(node);
+    				console.log("updateNode");
+    			}
+    		}
+    	};
+
+    	return [node];
+    }
+
+    class NodeEditorAudio extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { node: 0 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "NodeEditorAudio",
+    			options,
+    			id: create_fragment$6.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || ({});
+
+    		if (/*node*/ ctx[0] === undefined && !("node" in props)) {
+    			console_1$2.warn("<NodeEditorAudio> was created without expected prop 'node'");
+    		}
+    	}
+
+    	get node() {
+    		throw new Error("<NodeEditorAudio>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set node(value) {
+    		throw new Error("<NodeEditorAudio>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src/Graph.svelte generated by Svelte v3.16.6 */
+    const file$6 = "src/Graph.svelte";
+
+    // (227:0) {#if canAddNode}
     function create_if_block_6(ctx) {
     	let button0;
     	let t1;
@@ -1536,9 +1963,9 @@ var app = (function () {
     			t3 = space();
     			button2 = element("button");
     			button2.textContent = "New Single Account";
-    			add_location(button0, file$5, 223, 2, 5725);
-    			add_location(button1, file$5, 224, 2, 5775);
-    			add_location(button2, file$5, 225, 2, 5842);
+    			add_location(button0, file$6, 227, 2, 5858);
+    			add_location(button1, file$6, 228, 2, 5908);
+    			add_location(button2, file$6, 229, 2, 5975);
 
     			dispose = [
     				listen_dev(button0, "click", /*addNewNode*/ ctx[14], false, false, false),
@@ -1568,14 +1995,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(223:0) {#if canAddNode}",
+    		source: "(227:0) {#if canAddNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (229:0) {#if canDeleteNodes}
+    // (233:0) {#if canDeleteNodes}
     function create_if_block_5(ctx) {
     	let button;
     	let t0;
@@ -1588,7 +2015,7 @@ var app = (function () {
     			button = element("button");
     			t0 = text("Delete node");
     			t1 = text(t1_value);
-    			add_location(button, file$5, 229, 2, 5940);
+    			add_location(button, file$6, 233, 2, 6073);
     			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[13], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1609,14 +2036,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(229:0) {#if canDeleteNodes}",
+    		source: "(233:0) {#if canDeleteNodes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (233:0) {#if canAddEdge}
+    // (237:0) {#if canAddEdge}
     function create_if_block_4(ctx) {
     	let button;
     	let dispose;
@@ -1625,7 +2052,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Add Edge";
-    			add_location(button, file$5, 233, 2, 6049);
+    			add_location(button, file$6, 237, 2, 6182);
     			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[11], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1642,14 +2069,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(233:0) {#if canAddEdge}",
+    		source: "(237:0) {#if canAddEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (237:0) {#if canDeleteEdge}
+    // (241:0) {#if canDeleteEdge}
     function create_if_block_3(ctx) {
     	let button;
     	let dispose;
@@ -1658,7 +2085,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Delete Edge";
-    			add_location(button, file$5, 237, 2, 6126);
+    			add_location(button, file$6, 241, 2, 6259);
     			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -1675,14 +2102,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(237:0) {#if canDeleteEdge}",
+    		source: "(241:0) {#if canDeleteEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (241:0) {#if canEditEdge}
+    // (245:0) {#if canEditEdge}
     function create_if_block_2(ctx) {
     	let current;
 
@@ -1722,96 +2149,70 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(241:0) {#if canEditEdge}",
+    		source: "(245:0) {#if canEditEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (245:0) {#if canEditNode}
-    function create_if_block$5(ctx) {
-    	let t;
-    	let if_block_anchor;
+    // (249:0) {#if canEditNode}
+    function create_if_block$6(ctx) {
     	let current;
 
     	const nodeeditor = new NodeEditor({
-    			props: { node: /*node1*/ ctx[3][0] },
+    			props: {
+    				node: /*node1*/ ctx[3][0],
+    				$$slots: { default: [create_default_slot] },
+    				$$scope: { ctx }
+    			},
     			$$inline: true
     		});
-
-    	let if_block = /*nodeEditor2*/ ctx[0] !== null && create_if_block_1(ctx);
 
     	const block = {
     		c: function create() {
     			create_component(nodeeditor.$$.fragment);
-    			t = space();
-    			if (if_block) if_block.c();
-    			if_block_anchor = empty();
     		},
     		m: function mount(target, anchor) {
     			mount_component(nodeeditor, target, anchor);
-    			insert_dev(target, t, anchor);
-    			if (if_block) if_block.m(target, anchor);
-    			insert_dev(target, if_block_anchor, anchor);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
     			const nodeeditor_changes = {};
     			if (dirty & /*node1*/ 8) nodeeditor_changes.node = /*node1*/ ctx[3][0];
-    			nodeeditor.$set(nodeeditor_changes);
 
-    			if (/*nodeEditor2*/ ctx[0] !== null) {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
-    					transition_in(if_block, 1);
-    				} else {
-    					if_block = create_if_block_1(ctx);
-    					if_block.c();
-    					transition_in(if_block, 1);
-    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
-    				}
-    			} else if (if_block) {
-    				group_outros();
-
-    				transition_out(if_block, 1, 1, () => {
-    					if_block = null;
-    				});
-
-    				check_outros();
+    			if (dirty & /*$$scope, nodeEditor2, node1*/ 33554441) {
+    				nodeeditor_changes.$$scope = { dirty, ctx };
     			}
+
+    			nodeeditor.$set(nodeeditor_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(nodeeditor.$$.fragment, local);
-    			transition_in(if_block);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(nodeeditor.$$.fragment, local);
-    			transition_out(if_block);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			destroy_component(nodeeditor, detaching);
-    			if (detaching) detach_dev(t);
-    			if (if_block) if_block.d(detaching);
-    			if (detaching) detach_dev(if_block_anchor);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$5.name,
+    		id: create_if_block$6.name,
     		type: "if",
-    		source: "(245:0) {#if canEditNode}",
+    		source: "(249:0) {#if canEditNode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (248:2) {#if nodeEditor2 !==null}
+    // (252:2) {#if nodeEditor2 !==null}
     function create_if_block_1(ctx) {
     	let switch_instance_anchor;
     	let current;
@@ -1888,14 +2289,77 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(248:2) {#if nodeEditor2 !==null}",
+    		source: "(252:2) {#if nodeEditor2 !==null}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$5(ctx) {
+    // (251:2) <NodeEditor node={node1[0]} >
+    function create_default_slot(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*nodeEditor2*/ ctx[0] !== null && create_if_block_1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			if (/*nodeEditor2*/ ctx[0] !== null) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    					transition_in(if_block, 1);
+    				} else {
+    					if_block = create_if_block_1(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot.name,
+    		type: "slot",
+    		source: "(251:2) <NodeEditor node={node1[0]} >",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$7(ctx) {
     	let div0;
     	let button;
     	let t1;
@@ -1918,7 +2382,7 @@ var app = (function () {
     	let if_block2 = /*canAddEdge*/ ctx[5] && create_if_block_4(ctx);
     	let if_block3 = /*canDeleteEdge*/ ctx[6] && create_if_block_3(ctx);
     	let if_block4 = /*canEditEdge*/ ctx[10] && create_if_block_2(ctx);
-    	let if_block5 = /*canEditNode*/ ctx[9] && create_if_block$5(ctx);
+    	let if_block5 = /*canEditNode*/ ctx[9] && create_if_block$6(ctx);
 
     	const block = {
     		c: function create() {
@@ -1943,16 +2407,16 @@ var app = (function () {
     			if (if_block5) if_block5.c();
     			t9 = space();
     			div1 = element("div");
-    			add_location(button, file$5, 218, 0, 5627);
-    			add_location(br0, file$5, 219, 0, 5666);
-    			add_location(br1, file$5, 239, 0, 6183);
+    			add_location(button, file$6, 222, 0, 5760);
+    			add_location(br0, file$6, 223, 0, 5799);
+    			add_location(br1, file$6, 243, 0, 6316);
     			attr_dev(div0, "class", "l0 editZone svelte-1st9kjt");
     			set_style(div0, "height", /*inh*/ ctx[1] + 1 + "px");
-    			add_location(div0, file$5, 216, 0, 5575);
+    			add_location(div0, file$6, 220, 0, 5708);
     			attr_dev(div1, "id", "mynet");
     			attr_dev(div1, "class", "graph svelte-1st9kjt");
     			set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
-    			add_location(div1, file$5, 254, 0, 6527);
+    			add_location(div1, file$6, 259, 0, 6663);
 
     			dispose = [
     				listen_dev(window, "resize", /*onwindowresize*/ ctx[24]),
@@ -2063,7 +2527,7 @@ var app = (function () {
     					if_block5.p(ctx, dirty);
     					transition_in(if_block5, 1);
     				} else {
-    					if_block5 = create_if_block$5(ctx);
+    					if_block5 = create_if_block$6(ctx);
     					if_block5.c();
     					transition_in(if_block5, 1);
     					if_block5.m(div0, null);
@@ -2113,7 +2577,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$5.name,
+    		id: create_fragment$7.name,
     		type: "component",
     		source: "",
     		ctx
@@ -2123,11 +2587,7 @@ var app = (function () {
     }
 
     function sampleDocumentNode() {
-    	return {
-    		shape: "image",
-    		size: 45,
-    		image: "./Austrian_ID_card.jpg"
-    	};
+    	return { nodeClass: "Document" };
     }
 
     function sampleLegalDocumentNode() {
@@ -2181,13 +2641,14 @@ var app = (function () {
     	]);
     }
 
-    function instance$5($$self, $$props, $$invalidate) {
+    function instance$7($$self, $$props, $$invalidate) {
     	let container = {
     		EdgeEditor,
     		NodeEditor,
     		NodeEditorDocument,
     		NodeEditorValidator,
-    		NodeEditorValidatorRejected
+    		NodeEditorValidatorRejected,
+    		NodeEditorAudio
     	};
 
     	let selection = { nodes: [], edges: [] };
@@ -2380,7 +2841,7 @@ var app = (function () {
     		if ($$self.$$.dirty & /*canEditNode, node1*/ 520) {
     			 {
     				if (canEditNode) {
-    					let editor = NodeEditor;
+    					let editor = null;
 
     					if (node1[0].nodeClass) {
     						editor = container["NodeEditor" + node1[0].nodeClass];
@@ -2424,20 +2885,20 @@ var app = (function () {
     class Graph extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "Graph",
     			options,
-    			id: create_fragment$5.name
+    			id: create_fragment$7.name
     		});
     	}
     }
 
     /* src/App.svelte generated by Svelte v3.16.6 */
 
-    function create_fragment$6(ctx) {
+    function create_fragment$8(ctx) {
     	let current;
     	const graph = new Graph({ $$inline: true });
 
@@ -2469,7 +2930,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$6.name,
+    		id: create_fragment$8.name,
     		type: "component",
     		source: "",
     		ctx
@@ -2481,13 +2942,13 @@ var app = (function () {
     class App extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, null, create_fragment$6, safe_not_equal, {});
+    		init(this, options, null, create_fragment$8, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "App",
     			options,
-    			id: create_fragment$6.name
+    			id: create_fragment$8.name
     		});
     	}
     }

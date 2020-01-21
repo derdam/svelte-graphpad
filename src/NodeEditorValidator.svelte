@@ -21,11 +21,9 @@ let reason;
 </script>
 
 {#if node}
-  Label&nbsp;<input type="text" bind:value={node.label} />
-  Class&nbsp;<input type="text" bind:value={node.nodeClass} />
-  <p>
+  <p>Reason: <input type="text" bind:value={reason}/></p>
     <button on:click={approve}>Approve</button>
-    Reason: <input type="text" bind:value={reason}/><button on:click={reject}>Reject</button>
-  </p>
+    <button on:click={reject}>Reject</button>
+
    <!-- <button on:click={sayHello}>Submit</button> -->
 {/if}

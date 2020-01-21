@@ -9,6 +9,7 @@
    import NodeEditorDocument from './NodeEditorDocument.svelte';
    import NodeEditorValidator from './NodeEditorValidator.svelte';
    import NodeEditorValidatorRejected from './NodeEditorValidatorRejected.svelte';
+   import NodeEditorAudio from './NodeEditorAudio.svelte';
    import GraphData from './GraphData.svelte';
 
 
@@ -17,7 +18,8 @@
      NodeEditor: NodeEditor,
      NodeEditorDocument: NodeEditorDocument,
      NodeEditorValidator: NodeEditorValidator,
-     NodeEditorValidatorRejected: NodeEditorValidatorRejected
+     NodeEditorValidatorRejected: NodeEditorValidatorRejected,
+     NodeEditorAudio:NodeEditorAudio
    }
 
    let selection = {nodes: [], edges: []};
@@ -42,7 +44,7 @@
     $: {
     if (canEditNode) {
     
-        let editor = NodeEditor;
+        let editor = null;
 
         if (node1[0].nodeClass)
         {
@@ -146,7 +148,9 @@
     };
 
     function sampleDocumentNode() {
-      return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
+     // return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
+     return {nodeClass:'Document'}
+    
     }
      function sampleLegalDocumentNode() {
       return {shape: 'image',   size:45, image: './contract-signing.png'}
@@ -244,10 +248,11 @@
 
 {#if canEditNode}
   <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
-  <NodeEditor node={node1[0]} ></NodeEditor>
+  <NodeEditor node={node1[0]} >
   {#if nodeEditor2 !==null}
    <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
   {/if}
+  </NodeEditor>
 {/if}
 
 </div>

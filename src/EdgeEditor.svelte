@@ -11,6 +11,7 @@
 
 
 {#if edge}
-    <input type="text" bind:value={edge.label} />
+Label
+    <textarea bind:value={edge.label} />
   <!--  <button on:click={sayHello}>Submit</button> -->
 {/if}
