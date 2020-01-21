@@ -842,10 +842,6 @@ var app = (function () {
     	let t1;
     	let t2_value = /*node*/ ctx[0].size + "";
     	let t2;
-    	let t3;
-    	let input2;
-    	let t4;
-    	let input3;
     	let dispose;
 
     	const block = {
@@ -856,32 +852,22 @@ var app = (function () {
     			span = element("span");
     			t1 = text(" ");
     			t2 = text(t2_value);
-    			t3 = space();
-    			input2 = element("input");
-    			t4 = text("\n      Class ");
-    			input3 = element("input");
     			attr_dev(input0, "type", "file");
     			attr_dev(input0, "accept", "image/*");
     			attr_dev(input0, "class", "w-full h-full cursor-pointer");
-    			add_location(input0, file$2, 25, 4, 586);
+    			add_location(input0, file$2, 26, 4, 589);
     			attr_dev(input1, "type", "range");
     			attr_dev(input1, "min", "45");
     			attr_dev(input1, "max", "200");
     			attr_dev(input1, "step", "5");
-    			add_location(input1, file$2, 32, 4, 711);
-    			add_location(span, file$2, 32, 67, 774);
-    			attr_dev(input2, "type", "text");
-    			add_location(input2, file$2, 33, 4, 809);
-    			attr_dev(input3, "type", "text");
-    			add_location(input3, file$2, 34, 17, 872);
+    			add_location(input1, file$2, 33, 4, 714);
+    			add_location(span, file$2, 33, 67, 777);
 
     			dispose = [
     				listen_dev(input0, "change", /*input0_change_handler*/ ctx[3]),
     				listen_dev(input0, "change", /*changed*/ ctx[2], false, false, false),
     				listen_dev(input1, "change", /*input1_change_input_handler*/ ctx[4]),
-    				listen_dev(input1, "input", /*input1_change_input_handler*/ ctx[4]),
-    				listen_dev(input2, "input", /*input2_input_handler*/ ctx[5]),
-    				listen_dev(input3, "input", /*input3_input_handler*/ ctx[6])
+    				listen_dev(input1, "input", /*input1_change_input_handler*/ ctx[4])
     			];
     		},
     		m: function mount(target, anchor) {
@@ -892,12 +878,6 @@ var app = (function () {
     			insert_dev(target, span, anchor);
     			append_dev(span, t1);
     			append_dev(span, t2);
-    			insert_dev(target, t3, anchor);
-    			insert_dev(target, input2, anchor);
-    			set_input_value(input2, /*node*/ ctx[0].label);
-    			insert_dev(target, t4, anchor);
-    			insert_dev(target, input3, anchor);
-    			set_input_value(input3, /*node*/ ctx[0].nodeClass);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*node*/ 1) {
@@ -905,24 +885,12 @@ var app = (function () {
     			}
 
     			if (dirty & /*node*/ 1 && t2_value !== (t2_value = /*node*/ ctx[0].size + "")) set_data_dev(t2, t2_value);
-
-    			if (dirty & /*node*/ 1 && input2.value !== /*node*/ ctx[0].label) {
-    				set_input_value(input2, /*node*/ ctx[0].label);
-    			}
-
-    			if (dirty & /*node*/ 1 && input3.value !== /*node*/ ctx[0].nodeClass) {
-    				set_input_value(input3, /*node*/ ctx[0].nodeClass);
-    			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(input0);
     			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(input1);
     			if (detaching) detach_dev(span);
-    			if (detaching) detach_dev(t3);
-    			if (detaching) detach_dev(input2);
-    			if (detaching) detach_dev(t4);
-    			if (detaching) detach_dev(input3);
     			run_all(dispose);
     		}
     	};
@@ -1021,16 +989,6 @@ var app = (function () {
     		$$invalidate(0, node);
     	}
 
-    	function input2_input_handler() {
-    		node.label = this.value;
-    		$$invalidate(0, node);
-    	}
-
-    	function input3_input_handler() {
-    		node.nodeClass = this.value;
-    		$$invalidate(0, node);
-    	}
-
     	$$self.$set = $$props => {
     		if ("node" in $$props) $$invalidate(0, node = $$props.node);
     	};
@@ -1053,15 +1011,7 @@ var app = (function () {
     		}
     	};
 
-    	return [
-    		node,
-    		files,
-    		changed,
-    		input0_change_handler,
-    		input1_change_input_handler,
-    		input2_input_handler,
-    		input3_input_handler
-    	];
+    	return [node, files, changed, input0_change_handler, input1_change_input_handler];
     }
 
     class NodeEditorDocument extends SvelteComponentDev {
@@ -1568,7 +1518,7 @@ var app = (function () {
     const file$5 = "src/Graph.svelte";
 
     // (223:0) {#if canAddNode}
-    function create_if_block_5(ctx) {
+    function create_if_block_6(ctx) {
     	let button0;
     	let t1;
     	let button1;
@@ -1616,7 +1566,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_5.name,
+    		id: create_if_block_6.name,
     		type: "if",
     		source: "(223:0) {#if canAddNode}",
     		ctx
@@ -1626,7 +1576,7 @@ var app = (function () {
     }
 
     // (229:0) {#if canDeleteNodes}
-    function create_if_block_4(ctx) {
+    function create_if_block_5(ctx) {
     	let button;
     	let t0;
     	let t1_value = (/*nodesSelected*/ ctx[2] > 1 ? "(s)" : "") + "";
@@ -1657,7 +1607,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4.name,
+    		id: create_if_block_5.name,
     		type: "if",
     		source: "(229:0) {#if canDeleteNodes}",
     		ctx
@@ -1667,7 +1617,7 @@ var app = (function () {
     }
 
     // (233:0) {#if canAddEdge}
-    function create_if_block_3(ctx) {
+    function create_if_block_4(ctx) {
     	let button;
     	let dispose;
 
@@ -1690,7 +1640,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_4.name,
     		type: "if",
     		source: "(233:0) {#if canAddEdge}",
     		ctx
@@ -1700,7 +1650,7 @@ var app = (function () {
     }
 
     // (237:0) {#if canDeleteEdge}
-    function create_if_block_2(ctx) {
+    function create_if_block_3(ctx) {
     	let button;
     	let dispose;
 
@@ -1723,7 +1673,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_3.name,
     		type: "if",
     		source: "(237:0) {#if canDeleteEdge}",
     		ctx
@@ -1733,7 +1683,7 @@ var app = (function () {
     }
 
     // (241:0) {#if canEditEdge}
-    function create_if_block_1(ctx) {
+    function create_if_block_2(ctx) {
     	let current;
 
     	const edgeeditor = new EdgeEditor({
@@ -1770,7 +1720,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
+    		id: create_if_block_2.name,
     		type: "if",
     		source: "(241:0) {#if canEditEdge}",
     		ctx
@@ -1781,6 +1731,88 @@ var app = (function () {
 
     // (245:0) {#if canEditNode}
     function create_if_block$5(ctx) {
+    	let t;
+    	let if_block_anchor;
+    	let current;
+
+    	const nodeeditor = new NodeEditor({
+    			props: { node: /*node1*/ ctx[3][0] },
+    			$$inline: true
+    		});
+
+    	let if_block = /*nodeEditor2*/ ctx[0] !== null && create_if_block_1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			create_component(nodeeditor.$$.fragment);
+    			t = space();
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(nodeeditor, target, anchor);
+    			insert_dev(target, t, anchor);
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const nodeeditor_changes = {};
+    			if (dirty & /*node1*/ 8) nodeeditor_changes.node = /*node1*/ ctx[3][0];
+    			nodeeditor.$set(nodeeditor_changes);
+
+    			if (/*nodeEditor2*/ ctx[0] !== null) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    					transition_in(if_block, 1);
+    				} else {
+    					if_block = create_if_block_1(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(nodeeditor.$$.fragment, local);
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(nodeeditor.$$.fragment, local);
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(nodeeditor, detaching);
+    			if (detaching) detach_dev(t);
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$5.name,
+    		type: "if",
+    		source: "(245:0) {#if canEditNode}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (248:2) {#if nodeEditor2 !==null}
+    function create_if_block_1(ctx) {
     	let switch_instance_anchor;
     	let current;
     	var switch_value = /*nodeEditor2*/ ctx[0];
@@ -1854,9 +1886,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$5.name,
+    		id: create_if_block_1.name,
     		type: "if",
-    		source: "(245:0) {#if canEditNode}",
+    		source: "(248:2) {#if nodeEditor2 !==null}",
     		ctx
     	});
 
@@ -1881,11 +1913,11 @@ var app = (function () {
     	let current;
     	let dispose;
     	add_render_callback(/*onwindowresize*/ ctx[24]);
-    	let if_block0 = /*canAddNode*/ ctx[8] && create_if_block_5(ctx);
-    	let if_block1 = /*canDeleteNodes*/ ctx[7] && create_if_block_4(ctx);
-    	let if_block2 = /*canAddEdge*/ ctx[5] && create_if_block_3(ctx);
-    	let if_block3 = /*canDeleteEdge*/ ctx[6] && create_if_block_2(ctx);
-    	let if_block4 = /*canEditEdge*/ ctx[10] && create_if_block_1(ctx);
+    	let if_block0 = /*canAddNode*/ ctx[8] && create_if_block_6(ctx);
+    	let if_block1 = /*canDeleteNodes*/ ctx[7] && create_if_block_5(ctx);
+    	let if_block2 = /*canAddEdge*/ ctx[5] && create_if_block_4(ctx);
+    	let if_block3 = /*canDeleteEdge*/ ctx[6] && create_if_block_3(ctx);
+    	let if_block4 = /*canEditEdge*/ ctx[10] && create_if_block_2(ctx);
     	let if_block5 = /*canEditNode*/ ctx[9] && create_if_block$5(ctx);
 
     	const block = {
@@ -1920,7 +1952,7 @@ var app = (function () {
     			attr_dev(div1, "id", "mynet");
     			attr_dev(div1, "class", "graph svelte-1st9kjt");
     			set_style(div1, "height", /*inh*/ ctx[1] + 1 + "px");
-    			add_location(div1, file$5, 251, 0, 6445);
+    			add_location(div1, file$5, 254, 0, 6527);
 
     			dispose = [
     				listen_dev(window, "resize", /*onwindowresize*/ ctx[24]),
@@ -1958,7 +1990,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_5(ctx);
+    					if_block0 = create_if_block_6(ctx);
     					if_block0.c();
     					if_block0.m(div0, t3);
     				}
@@ -1971,7 +2003,7 @@ var app = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_4(ctx);
+    					if_block1 = create_if_block_5(ctx);
     					if_block1.c();
     					if_block1.m(div0, t4);
     				}
@@ -1984,7 +2016,7 @@ var app = (function () {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
-    					if_block2 = create_if_block_3(ctx);
+    					if_block2 = create_if_block_4(ctx);
     					if_block2.c();
     					if_block2.m(div0, t5);
     				}
@@ -1997,7 +2029,7 @@ var app = (function () {
     				if (if_block3) {
     					if_block3.p(ctx, dirty);
     				} else {
-    					if_block3 = create_if_block_2(ctx);
+    					if_block3 = create_if_block_3(ctx);
     					if_block3.c();
     					if_block3.m(div0, t6);
     				}
@@ -2011,7 +2043,7 @@ var app = (function () {
     					if_block4.p(ctx, dirty);
     					transition_in(if_block4, 1);
     				} else {
-    					if_block4 = create_if_block_1(ctx);
+    					if_block4 = create_if_block_2(ctx);
     					if_block4.c();
     					transition_in(if_block4, 1);
     					if_block4.m(div0, t8);

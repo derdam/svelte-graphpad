@@ -23,6 +23,7 @@
 </script>
 
 {#if node}
+  
     <input
 		type="file"
 		accept="image/*"
@@ -31,6 +32,5 @@
 		on:change={changed}
     />
     <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
-    <input type="text" bind:value={node.label} />
-      Class&nbsp;<input type="text" bind:value={node.nodeClass} />
+
 {/if}

@@ -244,7 +244,10 @@
 
 {#if canEditNode}
   <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
-  <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
+  <NodeEditor node={node1[0]} ></NodeEditor>
+  {#if nodeEditor2 !==null}
+   <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
+  {/if}
 {/if}
 
 </div>
