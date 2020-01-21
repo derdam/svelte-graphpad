@@ -5,6 +5,12 @@
 <style>
     .tool {
         background-color:#212121;
+        border-top: 1px;
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom:  0px;
+        border-style: solid;
+        border-color: #444444
     }
 
     .title {

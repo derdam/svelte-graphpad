@@ -1960,10 +1960,10 @@ var app = (function () {
     			t0 = text(/*title*/ ctx[0]);
     			t1 = space();
     			if (default_slot) default_slot.c();
-    			attr_dev(div0, "class", "title svelte-v9jatv");
-    			add_location(div0, file$6, 16, 4, 200);
-    			attr_dev(div1, "class", "tool svelte-v9jatv");
-    			add_location(div1, file$6, 15, 0, 177);
+    			attr_dev(div0, "class", "title svelte-1r2e2da");
+    			add_location(div0, file$6, 22, 4, 366);
+    			attr_dev(div1, "class", "tool svelte-1r2e2da");
+    			add_location(div1, file$6, 21, 0, 343);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
