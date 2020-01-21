@@ -11,6 +11,7 @@
    import NodeEditorValidatorRejected from './NodeEditorValidatorRejected.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
    import GraphData from './GraphData.svelte';
+   import Tool from './Tool.svelte';
 
 
   let container = { 
@@ -199,8 +200,8 @@
 <style>
   .editZone {
       position:absolute;
-      left:80%;
-      width:20%;
+      left:82%;
+      width:18%;
      
       z-index:99; 
       opacity:0.8; 
@@ -220,40 +221,49 @@
 
 <div class="l0 editZone" style="height:{inh+1}px">
 
-<button on:click={fit}>Center</button>
-<br/>
+<Tool title="View">
+  <button on:click={fit}>Center</button>
+</Tool>
+
+
 
 <!-- <GraphData></GraphData> -->
 {#if canAddNode}
-  <button on:click={addNewNode}>New node</button>
+  <Tool title="Graph">
+   <button on:click={addNewNode}>New node</button>
   <button on:click={addNewDocumentNode}>New document node</button>
   <button on:click={addNewSingleAccount}>New Single Account</button> 
-{/if}
-
-{#if canDeleteNodes}
-  <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
-{/if}
-
-{#if canAddEdge}
-  <button on:click={addNewEdge}>Add Edge</button>
-{/if}
-
-{#if canDeleteEdge}
-  <button on:click={deleteEdge}>Delete Edge</button>
-{/if}
-<br/>
-{#if canEditEdge}
-  <EdgeEditor edge={edge1[0]}></EdgeEditor>
-{/if}
-
-{#if canEditNode}
-  <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
-  <NodeEditor node={node1[0]} >
-  {#if nodeEditor2 !==null}
-   <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
+  {#if canDeleteNodes}
+    <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
   {/if}
-  </NodeEditor>
-{/if}
+
+  {#if canAddEdge}
+    <button on:click={addNewEdge}>Add Edge</button>
+  {/if}
+
+  {#if canDeleteEdge}
+    <button on:click={deleteEdge}>Delete Edge</button>
+  {/if}
+  </Tool>
+ {/if}
+
+
+  {#if canEditEdge}
+    <Tool title = "Edge">
+      <EdgeEditor edge={edge1[0]}></EdgeEditor>
+    </Tool>
+  {/if}
+
+  {#if canEditNode}
+    <Tool title = "Node">
+      <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
+      <NodeEditor node={node1[0]} >
+      {#if nodeEditor2 !==null}
+      <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
+      {/if}
+      </NodeEditor>
+    </Tool>
+  {/if}
 
 </div>
 
