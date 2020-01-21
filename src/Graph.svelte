@@ -153,6 +153,15 @@
      return {nodeClass:'Document'}
     
     }
+
+
+      function sampleIdDocumentNode() {
+    return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
+    
+    
+    }
+
+
      function sampleLegalDocumentNode() {
       return {shape: 'image',   size:45, image: './contract-signing.png'}
     }
@@ -172,7 +181,7 @@
         {id: "sa_ah1", label: "Account\nHolder"},
         {id: "sa_bo1", label: "Beneficial\nOwner"},
         {id: "sa_np1", label: "Natural\nPerson"},
-        {id: "sa_np1_id", label: "ID Card", nodeClass:"Document", ...sampleDocumentNode()},
+        {id: "sa_np1_id", label: "ID Card", nodeClass:"Document", ...sampleIdDocumentNode()},
         {id: "sa_ah1_doc0", label: "Form 0", nodeClass:"Document", ...sampleLegalDocumentNode()},
         {id: "sa_bo1_doc4", label: "Form 4",nodeClass:"Document", ...sampleLegalDocumentNode()},
        
@@ -219,7 +228,7 @@
 
 <svelte:window bind:innerHeight={inh} innerWidth={inw}/>
 
-<div class="l0 editZone" style="height:{inh+1}px">
+<div class="l0 editZone" >
 
 <Tool title="View">
   <button on:click={fit}>Center</button>
