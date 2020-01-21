@@ -13,8 +13,8 @@ let reason;
 
       function reject() {
       var id = addNode({label:reason})
-      updateNode({id: node.id, nodeClass:"ValidatorRejected", reasonId:id});
-      addEdge({label:'Rejected', from: node.id, to:id[0]})
+      updateNode({id: node.id, label: node.label+"\n"+"rejected", nodeClass:"ValidatorRejected", reasonId:id});
+      addEdge({label:'reason', from: node.id, to:id[0]})
     }
 
 

@@ -1160,10 +1160,10 @@ var app = (function () {
     			button1.textContent = "Reject";
     			attr_dev(input, "type", "text");
     			attr_dev(input, "placeholder", "Reason");
-    			add_location(input, file$3, 23, 5, 445);
-    			add_location(p, file$3, 23, 2, 442);
-    			add_location(button0, file$3, 24, 4, 516);
-    			add_location(button1, file$3, 25, 4, 564);
+    			add_location(input, file$3, 23, 5, 478);
+    			add_location(p, file$3, 23, 2, 475);
+    			add_location(button0, file$3, 24, 4, 549);
+    			add_location(button1, file$3, 25, 4, 597);
 
     			dispose = [
     				listen_dev(input, "input", /*input_input_handler*/ ctx[4]),
@@ -1268,12 +1268,13 @@ var app = (function () {
 
     		updateNode({
     			id: node.id,
+    			label: node.label + "\n" + "rejected",
     			nodeClass: "ValidatorRejected",
     			reasonId: id
     		});
 
     		addEdge({
-    			label: "Rejected",
+    			label: "reason",
     			from: node.id,
     			to: id[0]
     		});
