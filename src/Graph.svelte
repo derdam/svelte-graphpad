@@ -10,6 +10,7 @@
    import NodeEditorValidator from './NodeEditorValidator.svelte';
    import NodeEditorValidatorRejected from './NodeEditorValidatorRejected.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
+   import NodeEditorAddress from './NodeEditorAddress.svelte';
    import GraphData from './GraphData.svelte';
    import Tool from './Tool.svelte';
 
@@ -20,7 +21,8 @@
      NodeEditorDocument: NodeEditorDocument,
      NodeEditorValidator: NodeEditorValidator,
      NodeEditorValidatorRejected: NodeEditorValidatorRejected,
-     NodeEditorAudio:NodeEditorAudio
+     NodeEditorAudio:NodeEditorAudio,
+     NodeEditorAddress:NodeEditorAddress
    }
 
    let selection = {nodes: [], edges: []};
@@ -254,7 +256,7 @@
 
 <svelte:window bind:innerHeight={inh} innerWidth={inw}/>
 
-<div class="l0 editZone" >
+<div class="l0 editZone">
 
 <Tool title="View">
   <button on:click={fit}>Center</button>
@@ -266,7 +268,7 @@
 {#if canAddNode}
   <Tool title="Graph">
    <button on:click={addNewNode}>New node</button>
-  <button on:click={addNewDocumentNode}>New document node</button>
+  <button on:click={addNewDocumentNode}>New document</button>
   <button on:click={addNewSingleAccount}>New Single Account</button> 
   {#if canDeleteNodes}
     <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
