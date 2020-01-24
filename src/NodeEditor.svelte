@@ -4,7 +4,7 @@
 
    export let node;
 
-    $: { updateNode(node); }
+   $: { updateNode(node); }
 
 </script>
 

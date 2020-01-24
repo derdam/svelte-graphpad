@@ -40,12 +40,18 @@
    $: canEditNode = selection.nodes.length === 1;
    $: canEditEdge = selection.edges.length === 1 && !canEditNode;
 
-
+   let nodeChangeSignal = 0;
 
     $: {
     if (canEditNode) {
     
         let editor = null;
+
+        // capture nodeChangeSignal property changes
+        let trigger = nodeChangeSignal;
+
+        //console.log("signal: ", trigger)
+        //console.log("nodeEditor2 evaluated. nodeClass=" + node1[0].nodeClass);
 
         if (node1[0].nodeClass)
         {
@@ -73,10 +79,13 @@
             width: '100%',
     interaction: { multiselect: true},
     nodes:{
+       font: {color: '#ffffff'},
      shapeProperties: {
             useBorderWithImage:true,
             interpolation:true
-          }
+          },
+          color:'#0077C8'
+     
     }
   };
 
@@ -92,23 +101,26 @@
         selection = params;
     });
 
+
     let nodeUpdating = false;
     nodes.on('update', function (event, properties, senderId) { 
      if (!nodeUpdating) {
-        // alert(JSON.stringify(properties));
+       //  console.log("node.on update: "+JSON.stringify(properties));
         nodeUpdating = true;
          let view = buildNodeView(properties.data[0]);
      
         let node = {...properties.data[0], ...view};
        
        updateNode(node);
+
+       nodeChangeSignal++;
        // alert(JSON.stringify(node));
      
        nodeUpdating = false;
      }
     });
 
-    
+   
 
 
     setTimeout(() => {
