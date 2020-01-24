@@ -26,7 +26,7 @@
    let selection = {nodes: [], edges: []};
 
 
-   let nodeEditor2 = NodeEditor;
+   let nodeEditors = [NodeEditor];
 
    $: nodesSelected = selection.nodes.length;
    $: node1 = nodes.get(selection.nodes.slice(0,1));
@@ -46,6 +46,7 @@
     if (canEditNode) {
     
         let editor = null;
+        let editors = [];
 
         // capture nodeChangeSignal property changes
         let trigger = nodeChangeSignal;
@@ -55,10 +56,23 @@
 
         if (node1[0].nodeClass)
         {
-           editor = container["NodeEditor"+node1[0].nodeClass]
+          editor = container["NodeEditor"+node1[0].nodeClass]
+          
+          let tokens = node1[0].nodeClass.split(" ");
+          console.log(tokens);
+
+          tokens.forEach(t=> {
+            let e = container["NodeEditor"+t];
+            if (e) {
+              editors.push(e);
+            }
+
+          })
+          
+         
         } 
         
-        nodeEditor2 = editor;
+        nodeEditors = [...editors];
     }
   }
 
@@ -282,9 +296,14 @@
     <Tool title = "Node">
       <!-- <NodeEditor node={node1[0]} on:message={nodeUpdated}></NodeEditor> -->
       <NodeEditor node={node1[0]} >
-      {#if nodeEditor2 !==null}
+      <!-- {#if nodeEditor2 !==null}
       <svelte:component this={nodeEditor2} node={node1[0]} ></svelte:component>
       {/if}
+      -->
+      {#each nodeEditors as editor}
+         <svelte:component this={editor} node={node1[0]} ></svelte:component>
+   
+      {/each}
       </NodeEditor>
     </Tool>
   {/if}
