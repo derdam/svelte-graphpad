@@ -63,7 +63,7 @@
 
           tokens.forEach(t=> {
             let e = container["NodeEditor"+t];
-            if (e) {
+            if (t!=="") {
               editors.push(e);
             }
 
