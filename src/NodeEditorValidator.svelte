@@ -21,6 +21,9 @@ let reason;
       addEdge({label:'rejected', from: node.id, to:id[0]})
     }
 
+function remove() {
+    removeNode(node);
+}
 
 </script>
 
@@ -28,6 +31,7 @@ let reason;
   <p><input type="text" bind:value={reason} placeholder="Reason" /></p>
     <button on:click={approve}>Approve</button>
     <button on:click={reject}>Reject</button>
+  <button on:click={remove}>Remove</button>
 
    <!-- <button on:click={sayHello}>Submit</button> -->
 {/if}
