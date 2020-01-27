@@ -9,6 +9,7 @@
    import NodeEditorDocument from './NodeEditorDocument.svelte';
    import NodeEditorValidator from './NodeEditorValidator.svelte';
    import NodeEditorValidatorRejected from './NodeEditorValidatorRejected.svelte';
+   import NodeEditorValidatorAccepted from './NodeEditorValidatorAccepted.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
    import NodeEditorAddress from './NodeEditorAddress.svelte';
    import GraphData from './GraphData.svelte';
@@ -20,6 +21,7 @@
      NodeEditor: NodeEditor,
      NodeEditorDocument: NodeEditorDocument,
      NodeEditorValidator: NodeEditorValidator,
+     NodeEditorValidatorAccepted,NodeEditorValidatorAccepted,
      NodeEditorValidatorRejected: NodeEditorValidatorRejected,
      NodeEditorAudio:NodeEditorAudio,
      NodeEditorAddress:NodeEditorAddress

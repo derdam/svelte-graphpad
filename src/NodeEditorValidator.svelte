@@ -8,13 +8,17 @@
 
 let reason;
     function approve() {
-      removeNode(node);
+      var id = addNode({label:reason, nodeClass:"ValidatorAccepted"})
+      
+      //updateNode({id: node.id,  nodeClass:"ValidatorRejected", reasonId:id});
+      addEdge({label:'approved', from: node.id, to:id[0]})
     }
 
       function reject() {
-      var id = addNode({label:reason})
-      updateNode({id: node.id, label: node.label+"\n"+"rejected", nodeClass:"ValidatorRejected", reasonId:id});
-      addEdge({label:'reason', from: node.id, to:id[0]})
+      var id = addNode({label:reason, nodeClass:"ValidatorRejected"})
+      
+      //updateNode({id: node.id,  nodeClass:"ValidatorRejected", reasonId:id});
+      addEdge({label:'rejected', from: node.id, to:id[0]})
     }
 
 
