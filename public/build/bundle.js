@@ -944,7 +944,7 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$2 = "src/NodeEditorDocument.svelte";
 
-    // (25:0) {#if node}
+    // (26:0) {#if node}
     function create_if_block$2(ctx) {
     	let input0;
     	let t0;
@@ -966,13 +966,13 @@ var app = (function () {
     			attr_dev(input0, "type", "file");
     			attr_dev(input0, "accept", "image/*");
     			attr_dev(input0, "class", "w-full h-full cursor-pointer");
-    			add_location(input0, file$2, 26, 4, 589);
+    			add_location(input0, file$2, 27, 4, 619);
     			attr_dev(input1, "type", "range");
     			attr_dev(input1, "min", "45");
     			attr_dev(input1, "max", "200");
     			attr_dev(input1, "step", "5");
-    			add_location(input1, file$2, 33, 4, 714);
-    			add_location(span, file$2, 33, 67, 777);
+    			add_location(input1, file$2, 34, 4, 744);
+    			add_location(span, file$2, 34, 67, 807);
 
     			dispose = [
     				listen_dev(input0, "change", /*input0_change_handler*/ ctx[3]),
@@ -1010,7 +1010,7 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(25:0) {#if node}",
+    		source: "(26:0) {#if node}",
     		ctx
     	});
 
@@ -1073,15 +1073,6 @@ var app = (function () {
     	const changed = event => {
     		$$invalidate(1, files = event.target.files);
     		$$invalidate(0, node.image = window.URL.createObjectURL(files[0]), node);
-
-    		let newNode = addNode({
-    			label: "Validate",
-    			nodeClass: "Validator",
-    			subject: node
-    		});
-
-    		console.log("added", newNode);
-    		let newEdge = addEdge({ from: node.id, to: newNode[0] });
     	};
 
     	const writable_props = ["node"];
@@ -2564,10 +2555,10 @@ var app = (function () {
     			t0 = text(/*title*/ ctx[0]);
     			t1 = space();
     			if (default_slot) default_slot.c();
-    			attr_dev(div0, "class", "title svelte-1r2e2da");
-    			add_location(div0, file$9, 22, 4, 366);
-    			attr_dev(div1, "class", "tool svelte-1r2e2da");
-    			add_location(div1, file$9, 21, 0, 343);
+    			attr_dev(div0, "class", "title svelte-1tv75sz");
+    			add_location(div0, file$9, 24, 4, 381);
+    			attr_dev(div1, "class", "tool svelte-1tv75sz");
+    			add_location(div1, file$9, 23, 0, 358);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

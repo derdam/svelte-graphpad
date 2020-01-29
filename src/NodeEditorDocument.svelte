@@ -12,10 +12,11 @@
             files = event.target.files;
             node.image = window.URL.createObjectURL(files[0]);
            
-
+            /*
             let newNode = addNode({label:'Validate', nodeClass:'Validator', subject:node});
               console.log('added' , newNode)
              let newEdge = addEdge({ from: node.id, to: newNode[0]});
+             */
         }
 
 
