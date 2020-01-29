@@ -1,6 +1,9 @@
 import { DataSet } from "vis-network";
 import { writable } from 'svelte/store';
 
+
+
+
 export let nodes = new DataSet([]);
 export let edges = new DataSet([]);
 
@@ -16,9 +19,9 @@ export const removeNode = (node) => {nodes.remove(node)};
 export const removeEdge = (edge) => {edges.remove(edge)};
 
 
-nodes.on('*', function (event, properties, senderId) { 
-    graph.set({  nodes: nodes.get(), edges: edges.get()});
-});
+//nodes.on('*', function (event, properties, senderId) { 
+ //   graph.set({  nodes: nodes.get(), edges: edges.get()});
+//});
 
 edges.on('*', function (event, properties, senderId) {  
     graph.set({  nodes: nodes.get(), edges: edges.get()});

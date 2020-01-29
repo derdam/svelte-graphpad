@@ -2,7 +2,7 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
+   import {  nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
    import { buildNodeView } from './NodeView.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
@@ -91,19 +91,27 @@
   };
 
   var options = {
-   physics: true,
+    physics:{
+    enabled: true,
+    barnesHut: {
+      gravitationalConstant: -2000,
+      centralGravity: 0.3,
+      springLength: 95,
+      springConstant: 0.04,
+      damping: 0.09,
+      avoidOverlap: 0.0
+    }},
    autoResize: true,
             height: '100%',
             width: '100%',
-    interaction: { multiselect: true},
+    interaction: { multiselect: true },
     nodes:{
-       font: {color: '#ffffff'},
-     shapeProperties: {
-            useBorderWithImage:true,
-            interpolation:true
-          },
-          color:'#0077C8'
-     
+      font: {color: '#ffffff'},
+      shapeProperties: {
+              useBorderWithImage:true,
+              interpolation:true
+      },
+      color:'#0077C8' 
     }
   };
 
@@ -248,7 +256,7 @@
 
     .graph {
       position: absolute;
-      top: 0px;
+      top: -2px;
       left:-2px;
       width: 101%;
       height:400px;
@@ -314,5 +322,5 @@
 
 </div>
 
-<div id ="mynet" class="graph" style="height:{inh+1}px">
+<div id ="mynet" class="graph" style="height:{inh+2}px">
 </div>	
