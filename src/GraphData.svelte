@@ -20,7 +20,7 @@
    }
   
 </script>
-<p><input type="text" bind:value={storeName}>Store name</p>
-<p><button on:click={store}>Store</button></p>
-<p><button on:click={restore}>Restore</button></p>
+<p>Store name<input type="text" bind:value={storeName}></p>
+<p><button on:click={store}>Store</button>
+<button on:click={restore}>Restore</button></p>
 <p>{JSON.stringify($graph)}</p>

@@ -319,7 +319,11 @@
       </NodeEditor>
     </Tool>
   {/if}
-  <GraphData></GraphData>
+
+  <Tool title="Data">
+    <GraphData></GraphData>
+  </Tool>
+
 </div>
 
 <div id ="mynet" class="graph" style="height:{inh+2}px">
