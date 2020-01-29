@@ -2,7 +2,7 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   import {  nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
+   import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
    import { buildNodeView } from './NodeView.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
@@ -12,7 +12,7 @@
    import NodeEditorValidatorAccepted from './NodeEditorValidatorAccepted.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
    import NodeEditorAddress from './NodeEditorAddress.svelte';
-   import GraphData from './GraphData.svelte';
+   import GraphData, { restore } from './GraphData.svelte';
    import Tool from './Tool.svelte';
 
 
@@ -319,7 +319,7 @@
       </NodeEditor>
     </Tool>
   {/if}
-
+  <GraphData></GraphData>
 </div>
 
 <div id ="mynet" class="graph" style="height:{inh+2}px">
