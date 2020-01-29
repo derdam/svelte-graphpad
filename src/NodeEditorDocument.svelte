@@ -32,6 +32,7 @@
 		bind:files
 		on:change={changed}
     />
+    <input type="text" bind:value={node.image}>
     <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
 
 {/if}
