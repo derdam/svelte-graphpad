@@ -19,6 +19,7 @@ function toDataURL(src, callback, outputFormat) {
     ctx.drawImage(this, 0, 0);
     dataURL = canvas.toDataURL(outputFormat);
     callback(dataURL);
+    document.deleteElement('CANVAS');
   };
   img.src = src;
   if (img.complete || img.complete === undefined) {
