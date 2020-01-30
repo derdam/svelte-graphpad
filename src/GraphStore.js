@@ -27,9 +27,9 @@ edges.on('*', function (event, properties, senderId) {
     graph.set({  nodes: nodes.get(), edges: edges.get()});
 });
 
-addNode({id:-1, label:"Start", color:"green"});
+// addNode({id:-1, label:"Start", color:"green"});
 addNode({id:0, label:"Hello"});
 addNode({id:2, label:"World"});
 
-addEdge({from:-1, to:0} )
+//addEdge({from:-1, to:0} )
 addEdge({from:0, to:2} )
