@@ -12,6 +12,7 @@
    import NodeEditorValidatorAccepted from './NodeEditorValidatorAccepted.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
    import NodeEditorAddress from './NodeEditorAddress.svelte';
+   import NodeEditorYoutube from './NodeEditorYoutube.svelte'
    import GraphData, { restore } from './GraphData.svelte';
    import Tool from './Tool.svelte';
 
@@ -24,7 +25,8 @@
      NodeEditorValidatorAccepted,NodeEditorValidatorAccepted,
      NodeEditorValidatorRejected: NodeEditorValidatorRejected,
      NodeEditorAudio:NodeEditorAudio,
-     NodeEditorAddress:NodeEditorAddress
+     NodeEditorAddress:NodeEditorAddress,
+     NodeEditorYoutube:NodeEditorYoutube
    }
 
    let selection = {nodes: [], edges: []};
@@ -90,7 +92,7 @@
     edges: edges
   };
 
-  var options = {
+  let options = {
     physics:{
     enabled: true,
     barnesHut: {
@@ -112,8 +114,12 @@
               interpolation:true
       },
       color:'#0077C8' 
+    }, edges: {
+      smooth: { enabled: false}
     }
   };
+
+
 
 
   let network;
@@ -325,6 +331,5 @@
   </Tool>
 
 </div>
-
 <div id ="mynet" class="graph" style="height:{inh+2}px">
 </div>	

@@ -7,7 +7,6 @@
    $: { updateNode(node); }
 
 </script>
-
 {#if node}
 <div>
  <p><input type="text" bind:value={node.nodeClass} placeholder="Classes"/></p>
