@@ -45,7 +45,7 @@
      console.log("setImageFrom..Video", thumbUrl);
 
      node.image=thumbUrl;
-     node.shape="image";
+     node.shape="circularImage";
 
     }
  }

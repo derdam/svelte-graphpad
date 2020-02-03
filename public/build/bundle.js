@@ -2426,15 +2426,15 @@ var app = (function () {
     			t2 = space();
     			iframe = element("iframe");
     			attr_dev(input, "type", "text");
-    			add_location(input, file$8, 60, 13, 1011);
-    			add_location(br, file$8, 60, 55, 1053);
+    			add_location(input, file$8, 60, 13, 1019);
+    			add_location(br, file$8, 60, 55, 1061);
     			attr_dev(iframe, "width", "100%");
     			attr_dev(iframe, "height", "315");
     			if (iframe.src !== (iframe_src_value = /*node*/ ctx[0].src)) attr_dev(iframe, "src", iframe_src_value);
     			attr_dev(iframe, "frameborder", "0");
     			attr_dev(iframe, "allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
     			iframe.allowFullscreen = true;
-    			add_location(iframe, file$8, 70, 3, 1243);
+    			add_location(iframe, file$8, 70, 3, 1251);
     			dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[4]);
     		},
     		m: function mount(target, anchor) {
@@ -2508,8 +2508,8 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Grab video thumbnail";
     			attr_dev(input, "type", "text");
-    			add_location(input, file$8, 63, 13, 1105);
-    			add_location(button, file$8, 63, 57, 1149);
+    			add_location(input, file$8, 63, 13, 1113);
+    			add_location(button, file$8, 63, 57, 1157);
 
     			dispose = [
     				listen_dev(input, "input", /*input_input_handler_1*/ ctx[5]),
@@ -2608,7 +2608,7 @@ var app = (function () {
     			let thumbUrl = "https://img.youtube.com/vi" + url.pathname + "/0.jpg";
     			console.log("setImageFrom..Video", thumbUrl);
     			$$invalidate(0, node.image = thumbUrl, node);
-    			$$invalidate(0, node.shape = "image", node);
+    			$$invalidate(0, node.shape = "circularImage", node);
     		}
     	}
 
