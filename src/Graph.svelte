@@ -110,7 +110,7 @@
     nodes:{
       font: {color: '#ffffff'},
       shapeProperties: {
-              useBorderWithImage:true,
+              useBorderWithImage:false,
               interpolation:true
       },
       color:'#0077C8' 
