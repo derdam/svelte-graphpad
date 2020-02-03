@@ -59,8 +59,11 @@
  
 
   Embed URL  <input type="text" bind:value={node.src}/><br/>
-  Video URL  <input type="text" bind:value={videoUrl}/>
-  <button on:click={setImageFromEmbeddedVideo}>Grab video thumbnail</button>
+
+  {#if node.image===undefined} 
+  Video URL  <input type="text" bind:value={videoUrl}/>  <button on:click={setImageFromEmbeddedVideo}>Grab video thumbnail</button>
+  {/if}
+
 
    
 
