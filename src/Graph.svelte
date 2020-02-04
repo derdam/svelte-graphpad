@@ -2,8 +2,9 @@
   //	import AudioPlayer, { stopAll } from './AudioPlayer.svelte';
 	 import * as vis from 'vis-network'
    import { onMount } from 'svelte';
-   import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge } from './GraphStore.js';
+   import { nodes, edges, addNode, updateNode, addEdge, removeNode, removeEdge, updateEdge } from './GraphStore.js';
    import { buildNodeView } from './NodeView.js';
+   import { buildEdgeView } from './EdgeView.js';
    import NodeEditor from './NodeEditor.svelte';
    import EdgeEditor from './EdgeEditor.svelte';
    import NodeEditorDocument from './NodeEditorDocument.svelte';
@@ -33,6 +34,7 @@
 
 
    let nodeEditors = [NodeEditor];
+      let edgeEditors = [EdgeEditor];
 
    $: nodesSelected = selection.nodes.length;
    $: node1 = nodes.get(selection.nodes.slice(0,1));
@@ -79,6 +81,42 @@
         } 
         
         nodeEditors = [...editors];
+    }
+  }
+
+let edgeChangeSignal = 0;
+
+   $: {
+    if (canEditEdge) {
+    
+        let editor = null;
+        let editors = [];
+
+        // capture nodeChangeSignal property changes
+        let trigger = edgeChangeSignal;
+
+        //console.log("signal: ", trigger)
+        //console.log("nodeEditor2 evaluated. nodeClass=" + node1[0].nodeClass);
+
+        if (edge1[0].nodeClass)
+        {
+          editor = container["EdgeEditor"+edge1[0].edgeClass]
+          
+          let tokens = edge1[0].edgeClass.split(" ");
+          console.log(tokens);
+
+          tokens.forEach(t=> {
+            let e = container["EdgeEditor"+t];
+            if (t!=="") {
+              editors.push(e);
+            }
+
+          })
+          
+         
+        } 
+        
+        edgeEditors = [...editors];
     }
   }
 
@@ -153,7 +191,23 @@
     });
 
    
+ let edgeUpdating = false;
+    edges.on('update', function (event, properties, senderId) { 
+     if (!edgeUpdating) {
+       //  console.log("node.on update: "+JSON.stringify(properties));
+        edgeUpdating = true;
+         let view = buildEdgeView(properties.data[0]);
+     
+        let edge = {...properties.data[0], ...view};
+       
+       updateEdge(edge);
 
+       edgeChangeSignal++;
+       // alert(JSON.stringify(node));
+     
+       edgeUpdating = false;
+     }
+    });
 
     setTimeout(() => {
           network.fit();
@@ -306,6 +360,10 @@
   {#if canEditEdge}
     <Tool title = "Edge">
       <EdgeEditor edge={edge1[0]}></EdgeEditor>
+      {#each edgeEditors as editor}
+         <svelte:component this={editor} edge={edge1[0]} ></svelte:component>
+   
+      {/each}
     </Tool>
   {/if}
   </Tool>
