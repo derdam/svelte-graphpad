@@ -281,11 +281,9 @@
 
 
 <!-- <GraphData></GraphData> -->
-{#if canAddNode}
+{#if canAddNode && !canEditEdge}
   <Tool title="Graph">
    <button on:click={addNewNode}>New node</button>
-  <button on:click={addNewDocumentNode}>New document</button>
-  <button on:click={addNewSingleAccount}>New Single Account</button> 
   {#if canDeleteNodes}
     <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
   {/if}
@@ -295,6 +293,7 @@
  {/if}
 
 {#if canAddEdge | canEditEdge | canDeleteEdge}
+ <Tool title="Graph">
  {#if canAddEdge}
     <button on:click={addNewEdge}>Add Edge</button>
   {/if}
@@ -309,6 +308,7 @@
       <EdgeEditor edge={edge1[0]}></EdgeEditor>
     </Tool>
   {/if}
+  </Tool>
 {/if}
   {#if canEditNode}
     <Tool title = "Node">
@@ -326,9 +326,15 @@
     </Tool>
   {/if}
 
-  <Tool title="Data">
-    <GraphData></GraphData>
-  </Tool>
+  
+
+  {#if !canEditNode && !canEditEdge} 
+    <Tool title="Data">
+      <GraphData></GraphData>
+    </Tool>
+    <button on:click={addNewDocumentNode}>New document</button>
+    <button on:click={addNewSingleAccount}>New Single Account</button> 
+  {/if}
 
 </div>
 <div id ="mynet" class="graph" style="height:{inh+2}px">

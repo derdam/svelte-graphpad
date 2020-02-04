@@ -789,31 +789,48 @@ var app = (function () {
 
     // (13:0) {#if edge}
     function create_if_block$1(ctx) {
-    	let t;
     	let textarea;
+    	let t;
+    	let input;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			t = text("Label\n    ");
     			textarea = element("textarea");
-    			add_location(textarea, file$1, 14, 4, 149);
-    			dispose = listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[1]);
+    			t = space();
+    			input = element("input");
+    			attr_dev(textarea, "placeholder", "edge label");
+    			add_location(textarea, file$1, 14, 4, 144);
+    			attr_dev(input, "type", "text");
+    			attr_dev(input, "placeholder", "edge color");
+    			add_location(input, file$1, 15, 4, 209);
+
+    			dispose = [
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[1]),
+    				listen_dev(input, "input", /*input_input_handler*/ ctx[2])
+    			];
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, t, anchor);
     			insert_dev(target, textarea, anchor);
     			set_input_value(textarea, /*edge*/ ctx[0].label);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, input, anchor);
+    			set_input_value(input, /*edge*/ ctx[0].color);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*edge*/ 1) {
     				set_input_value(textarea, /*edge*/ ctx[0].label);
     			}
+
+    			if (dirty & /*edge*/ 1 && input.value !== /*edge*/ ctx[0].color) {
+    				set_input_value(input, /*edge*/ ctx[0].color);
+    			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(t);
     			if (detaching) detach_dev(textarea);
-    			dispose();
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(input);
+    			run_all(dispose);
     		}
     	};
 
@@ -890,6 +907,11 @@ var app = (function () {
     		$$invalidate(0, edge);
     	}
 
+    	function input_input_handler() {
+    		edge.color = this.value;
+    		$$invalidate(0, edge);
+    	}
+
     	$$self.$set = $$props => {
     		if ("edge" in $$props) $$invalidate(0, edge = $$props.edge);
     	};
@@ -910,7 +932,7 @@ var app = (function () {
     		}
     	};
 
-    	return [edge, textarea_input_handler];
+    	return [edge, textarea_input_handler, input_input_handler];
     }
 
     class EdgeEditor extends SvelteComponentDev {
@@ -3198,7 +3220,7 @@ var app = (function () {
     }
 
     // (277:0) <Tool title="View">
-    function create_default_slot_5(ctx) {
+    function create_default_slot_6(ctx) {
     	let button;
     	let dispose;
 
@@ -3221,7 +3243,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5.name,
+    		id: create_default_slot_6.name,
     		type: "slot",
     		source: "(277:0) <Tool title=\\\"View\\\">",
     		ctx
@@ -3230,14 +3252,14 @@ var app = (function () {
     	return block;
     }
 
-    // (284:0) {#if canAddNode}
-    function create_if_block_5(ctx) {
+    // (284:0) {#if canAddNode && !canEditEdge}
+    function create_if_block_6(ctx) {
     	let current;
 
     	const tool = new Tool({
     			props: {
     				title: "Graph",
-    				$$slots: { default: [create_default_slot_4] },
+    				$$slots: { default: [create_default_slot_5] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -3276,17 +3298,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_5.name,
+    		id: create_if_block_6.name,
     		type: "if",
-    		source: "(284:0) {#if canAddNode}",
+    		source: "(284:0) {#if canAddNode && !canEditEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (289:2) {#if canDeleteNodes}
-    function create_if_block_6(ctx) {
+    // (287:2) {#if canDeleteNodes}
+    function create_if_block_7(ctx) {
     	let button;
     	let t0;
     	let t1_value = (/*nodesSelected*/ ctx[2] > 1 ? "(s)" : "") + "";
@@ -3298,7 +3320,7 @@ var app = (function () {
     			button = element("button");
     			t0 = text("Delete node");
     			t1 = text(t1_value);
-    			add_location(button, file$b, 289, 4, 7550);
+    			add_location(button, file$b, 287, 4, 7434);
     			dispose = listen_dev(button, "click", /*deleteNodes*/ ctx[13], false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -3317,9 +3339,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_6.name,
+    		id: create_if_block_7.name,
     		type: "if",
-    		source: "(289:2) {#if canDeleteNodes}",
+    		source: "(287:2) {#if canDeleteNodes}",
     		ctx
     	});
 
@@ -3327,47 +3349,26 @@ var app = (function () {
     }
 
     // (285:2) <Tool title="Graph">
-    function create_default_slot_4(ctx) {
-    	let button0;
+    function create_default_slot_5(ctx) {
+    	let button;
     	let t1;
-    	let button1;
-    	let t3;
-    	let button2;
-    	let t5;
     	let if_block_anchor;
     	let dispose;
-    	let if_block = /*canDeleteNodes*/ ctx[7] && create_if_block_6(ctx);
+    	let if_block = /*canDeleteNodes*/ ctx[7] && create_if_block_7(ctx);
 
     	const block = {
     		c: function create() {
-    			button0 = element("button");
-    			button0.textContent = "New node";
+    			button = element("button");
+    			button.textContent = "New node";
     			t1 = space();
-    			button1 = element("button");
-    			button1.textContent = "New document";
-    			t3 = space();
-    			button2 = element("button");
-    			button2.textContent = "New Single Account";
-    			t5 = space();
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
-    			add_location(button0, file$b, 285, 3, 7343);
-    			add_location(button1, file$b, 286, 2, 7393);
-    			add_location(button2, file$b, 287, 2, 7455);
-
-    			dispose = [
-    				listen_dev(button0, "click", /*addNewNode*/ ctx[14], false, false, false),
-    				listen_dev(button1, "click", /*addNewDocumentNode*/ ctx[15], false, false, false),
-    				listen_dev(button2, "click", addNewSingleAccount, false, false, false)
-    			];
+    			add_location(button, file$b, 285, 3, 7359);
+    			dispose = listen_dev(button, "click", /*addNewNode*/ ctx[14], false, false, false);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button0, anchor);
+    			insert_dev(target, button, anchor);
     			insert_dev(target, t1, anchor);
-    			insert_dev(target, button1, anchor);
-    			insert_dev(target, t3, anchor);
-    			insert_dev(target, button2, anchor);
-    			insert_dev(target, t5, anchor);
     			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
@@ -3376,7 +3377,7 @@ var app = (function () {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block_6(ctx);
+    					if_block = create_if_block_7(ctx);
     					if_block.c();
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
     				}
@@ -3386,21 +3387,17 @@ var app = (function () {
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button0);
+    			if (detaching) detach_dev(button);
     			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(button1);
-    			if (detaching) detach_dev(t3);
-    			if (detaching) detach_dev(button2);
-    			if (detaching) detach_dev(t5);
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_4.name,
+    		id: create_default_slot_5.name,
     		type: "slot",
     		source: "(285:2) <Tool title=\\\"Graph\\\">",
     		ctx
@@ -3409,113 +3406,63 @@ var app = (function () {
     	return block;
     }
 
-    // (297:0) {#if canAddEdge | canEditEdge | canDeleteEdge}
-    function create_if_block_1$1(ctx) {
-    	let t0;
-    	let t1;
-    	let if_block2_anchor;
+    // (295:0) {#if canAddEdge | canEditEdge | canDeleteEdge}
+    function create_if_block_2(ctx) {
     	let current;
-    	let if_block0 = /*canAddEdge*/ ctx[5] && create_if_block_4(ctx);
-    	let if_block1 = /*canDeleteEdge*/ ctx[6] && create_if_block_3(ctx);
-    	let if_block2 = /*canEditEdge*/ ctx[10] && create_if_block_2(ctx);
+
+    	const tool = new Tool({
+    			props: {
+    				title: "Graph",
+    				$$slots: { default: [create_default_slot_3] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
 
     	const block = {
     		c: function create() {
-    			if (if_block0) if_block0.c();
-    			t0 = space();
-    			if (if_block1) if_block1.c();
-    			t1 = space();
-    			if (if_block2) if_block2.c();
-    			if_block2_anchor = empty();
+    			create_component(tool.$$.fragment);
     		},
     		m: function mount(target, anchor) {
-    			if (if_block0) if_block0.m(target, anchor);
-    			insert_dev(target, t0, anchor);
-    			if (if_block1) if_block1.m(target, anchor);
-    			insert_dev(target, t1, anchor);
-    			if (if_block2) if_block2.m(target, anchor);
-    			insert_dev(target, if_block2_anchor, anchor);
+    			mount_component(tool, target, anchor);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*canAddEdge*/ ctx[5]) {
-    				if (if_block0) {
-    					if_block0.p(ctx, dirty);
-    				} else {
-    					if_block0 = create_if_block_4(ctx);
-    					if_block0.c();
-    					if_block0.m(t0.parentNode, t0);
-    				}
-    			} else if (if_block0) {
-    				if_block0.d(1);
-    				if_block0 = null;
+    			const tool_changes = {};
+
+    			if (dirty & /*$$scope, canEditEdge, edge1, canDeleteEdge, canAddEdge*/ 536872048) {
+    				tool_changes.$$scope = { dirty, ctx };
     			}
 
-    			if (/*canDeleteEdge*/ ctx[6]) {
-    				if (if_block1) {
-    					if_block1.p(ctx, dirty);
-    				} else {
-    					if_block1 = create_if_block_3(ctx);
-    					if_block1.c();
-    					if_block1.m(t1.parentNode, t1);
-    				}
-    			} else if (if_block1) {
-    				if_block1.d(1);
-    				if_block1 = null;
-    			}
-
-    			if (/*canEditEdge*/ ctx[10]) {
-    				if (if_block2) {
-    					if_block2.p(ctx, dirty);
-    					transition_in(if_block2, 1);
-    				} else {
-    					if_block2 = create_if_block_2(ctx);
-    					if_block2.c();
-    					transition_in(if_block2, 1);
-    					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
-    				}
-    			} else if (if_block2) {
-    				group_outros();
-
-    				transition_out(if_block2, 1, 1, () => {
-    					if_block2 = null;
-    				});
-
-    				check_outros();
-    			}
+    			tool.$set(tool_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(if_block2);
+    			transition_in(tool.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(if_block2);
+    			transition_out(tool.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (if_block0) if_block0.d(detaching);
-    			if (detaching) detach_dev(t0);
-    			if (if_block1) if_block1.d(detaching);
-    			if (detaching) detach_dev(t1);
-    			if (if_block2) if_block2.d(detaching);
-    			if (detaching) detach_dev(if_block2_anchor);
+    			destroy_component(tool, detaching);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$1.name,
+    		id: create_if_block_2.name,
     		type: "if",
-    		source: "(297:0) {#if canAddEdge | canEditEdge | canDeleteEdge}",
+    		source: "(295:0) {#if canAddEdge | canEditEdge | canDeleteEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (298:1) {#if canAddEdge}
-    function create_if_block_4(ctx) {
+    // (297:1) {#if canAddEdge}
+    function create_if_block_5(ctx) {
     	let button;
     	let dispose;
 
@@ -3523,8 +3470,41 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Add Edge";
-    			add_location(button, file$b, 298, 4, 7732);
+    			add_location(button, file$b, 297, 4, 7638);
     			dispose = listen_dev(button, "click", /*addNewEdge*/ ctx[11], false, false, false);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, button, anchor);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(button);
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_5.name,
+    		type: "if",
+    		source: "(297:1) {#if canAddEdge}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (301:2) {#if canDeleteEdge}
+    function create_if_block_4(ctx) {
+    	let button;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			button = element("button");
+    			button.textContent = "Delete Edge";
+    			add_location(button, file$b, 301, 4, 7721);
+    			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -3540,54 +3520,21 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(298:1) {#if canAddEdge}",
+    		source: "(301:2) {#if canDeleteEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (302:2) {#if canDeleteEdge}
+    // (306:2) {#if canEditEdge}
     function create_if_block_3(ctx) {
-    	let button;
-    	let dispose;
-
-    	const block = {
-    		c: function create() {
-    			button = element("button");
-    			button.textContent = "Delete Edge";
-    			add_location(button, file$b, 302, 4, 7815);
-    			dispose = listen_dev(button, "click", /*deleteEdge*/ ctx[12], false, false, false);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
-    			dispose();
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_3.name,
-    		type: "if",
-    		source: "(302:2) {#if canDeleteEdge}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (307:2) {#if canEditEdge}
-    function create_if_block_2(ctx) {
     	let current;
 
     	const tool = new Tool({
     			props: {
     				title: "Edge",
-    				$$slots: { default: [create_default_slot_3] },
+    				$$slots: { default: [create_default_slot_4] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -3626,17 +3573,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_3.name,
     		type: "if",
-    		source: "(307:2) {#if canEditEdge}",
+    		source: "(306:2) {#if canEditEdge}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (308:4) <Tool title = "Edge">
-    function create_default_slot_3(ctx) {
+    // (307:4) <Tool title = "Edge">
+    function create_default_slot_4(ctx) {
     	let current;
 
     	const edgeeditor = new EdgeEditor({
@@ -3673,9 +3620,114 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
+    		id: create_default_slot_4.name,
+    		type: "slot",
+    		source: "(307:4) <Tool title = \\\"Edge\\\">",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (296:1) <Tool title="Graph">
+    function create_default_slot_3(ctx) {
+    	let t0;
+    	let t1;
+    	let if_block2_anchor;
+    	let current;
+    	let if_block0 = /*canAddEdge*/ ctx[5] && create_if_block_5(ctx);
+    	let if_block1 = /*canDeleteEdge*/ ctx[6] && create_if_block_4(ctx);
+    	let if_block2 = /*canEditEdge*/ ctx[10] && create_if_block_3(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block0) if_block0.c();
+    			t0 = space();
+    			if (if_block1) if_block1.c();
+    			t1 = space();
+    			if (if_block2) if_block2.c();
+    			if_block2_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block0) if_block0.m(target, anchor);
+    			insert_dev(target, t0, anchor);
+    			if (if_block1) if_block1.m(target, anchor);
+    			insert_dev(target, t1, anchor);
+    			if (if_block2) if_block2.m(target, anchor);
+    			insert_dev(target, if_block2_anchor, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			if (/*canAddEdge*/ ctx[5]) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_5(ctx);
+    					if_block0.c();
+    					if_block0.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (/*canDeleteEdge*/ ctx[6]) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_4(ctx);
+    					if_block1.c();
+    					if_block1.m(t1.parentNode, t1);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+
+    			if (/*canEditEdge*/ ctx[10]) {
+    				if (if_block2) {
+    					if_block2.p(ctx, dirty);
+    					transition_in(if_block2, 1);
+    				} else {
+    					if_block2 = create_if_block_3(ctx);
+    					if_block2.c();
+    					transition_in(if_block2, 1);
+    					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
+    				}
+    			} else if (if_block2) {
+    				group_outros();
+
+    				transition_out(if_block2, 1, 1, () => {
+    					if_block2 = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block2);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block2);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (if_block0) if_block0.d(detaching);
+    			if (detaching) detach_dev(t0);
+    			if (if_block1) if_block1.d(detaching);
+    			if (detaching) detach_dev(t1);
+    			if (if_block2) if_block2.d(detaching);
+    			if (detaching) detach_dev(if_block2_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(308:4) <Tool title = \\\"Edge\\\">",
+    		source: "(296:1) <Tool title=\\\"Graph\\\">",
     		ctx
     	});
 
@@ -3683,7 +3735,7 @@ var app = (function () {
     }
 
     // (313:2) {#if canEditNode}
-    function create_if_block$9(ctx) {
+    function create_if_block_1$1(ctx) {
     	let current;
 
     	const tool = new Tool({
@@ -3728,7 +3780,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$9.name,
+    		id: create_if_block_1$1.name,
     		type: "if",
     		source: "(313:2) {#if canEditNode}",
     		ctx
@@ -3971,7 +4023,89 @@ var app = (function () {
     	return block;
     }
 
-    // (329:2) <Tool title="Data">
+    // (331:2) {#if !canEditNode && !canEditEdge}
+    function create_if_block$9(ctx) {
+    	let t0;
+    	let button0;
+    	let t2;
+    	let button1;
+    	let current;
+    	let dispose;
+
+    	const tool = new Tool({
+    			props: {
+    				title: "Data",
+    				$$slots: { default: [create_default_slot] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(tool.$$.fragment);
+    			t0 = space();
+    			button0 = element("button");
+    			button0.textContent = "New document";
+    			t2 = space();
+    			button1 = element("button");
+    			button1.textContent = "New Single Account";
+    			add_location(button0, file$b, 334, 4, 8500);
+    			add_location(button1, file$b, 335, 4, 8564);
+
+    			dispose = [
+    				listen_dev(button0, "click", /*addNewDocumentNode*/ ctx[15], false, false, false),
+    				listen_dev(button1, "click", addNewSingleAccount, false, false, false)
+    			];
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(tool, target, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, button0, anchor);
+    			insert_dev(target, t2, anchor);
+    			insert_dev(target, button1, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const tool_changes = {};
+
+    			if (dirty & /*$$scope*/ 536870912) {
+    				tool_changes.$$scope = { dirty, ctx };
+    			}
+
+    			tool.$set(tool_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(tool.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(tool.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(tool, detaching);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(button0);
+    			if (detaching) detach_dev(t2);
+    			if (detaching) detach_dev(button1);
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$9.name,
+    		type: "if",
+    		source: "(331:2) {#if !canEditNode && !canEditEdge}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (332:4) <Tool title="Data">
     function create_default_slot(ctx) {
     	let current;
     	const graphdata = new GraphData({ $$inline: true });
@@ -4002,7 +4136,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(329:2) <Tool title=\\\"Data\\\">",
+    		source: "(332:4) <Tool title=\\\"Data\\\">",
     		ctx
     	});
 
@@ -4021,32 +4155,24 @@ var app = (function () {
     	let dispose;
     	add_render_callback(/*onwindowresize*/ ctx[25]);
 
-    	const tool0 = new Tool({
+    	const tool = new Tool({
     			props: {
     				title: "View",
-    				$$slots: { default: [create_default_slot_5] },
+    				$$slots: { default: [create_default_slot_6] },
     				$$scope: { ctx }
     			},
     			$$inline: true
     		});
 
-    	let if_block0 = /*canAddNode*/ ctx[8] && create_if_block_5(ctx);
-    	let if_block1 = /*canAddEdge*/ ctx[5] | /*canEditEdge*/ ctx[10] | /*canDeleteEdge*/ ctx[6] && create_if_block_1$1(ctx);
-    	let if_block2 = /*canEditNode*/ ctx[9] && create_if_block$9(ctx);
-
-    	const tool1 = new Tool({
-    			props: {
-    				title: "Data",
-    				$$slots: { default: [create_default_slot] },
-    				$$scope: { ctx }
-    			},
-    			$$inline: true
-    		});
+    	let if_block0 = /*canAddNode*/ ctx[8] && !/*canEditEdge*/ ctx[10] && create_if_block_6(ctx);
+    	let if_block1 = /*canAddEdge*/ ctx[5] | /*canEditEdge*/ ctx[10] | /*canDeleteEdge*/ ctx[6] && create_if_block_2(ctx);
+    	let if_block2 = /*canEditNode*/ ctx[9] && create_if_block_1$1(ctx);
+    	let if_block3 = !/*canEditNode*/ ctx[9] && !/*canEditEdge*/ ctx[10] && create_if_block$9(ctx);
 
     	const block = {
     		c: function create() {
     			div0 = element("div");
-    			create_component(tool0.$$.fragment);
+    			create_component(tool.$$.fragment);
     			t0 = space();
     			if (if_block0) if_block0.c();
     			t1 = space();
@@ -4054,7 +4180,7 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			create_component(tool1.$$.fragment);
+    			if (if_block3) if_block3.c();
     			t4 = space();
     			div1 = element("div");
     			attr_dev(div0, "class", "l0 editZone svelte-185z0jt");
@@ -4062,7 +4188,7 @@ var app = (function () {
     			attr_dev(div1, "id", "mynet");
     			attr_dev(div1, "class", "graph svelte-185z0jt");
     			set_style(div1, "height", /*inh*/ ctx[1] + 2 + "px");
-    			add_location(div1, file$b, 333, 0, 8540);
+    			add_location(div1, file$b, 339, 0, 8648);
     			dispose = listen_dev(window, "resize", /*onwindowresize*/ ctx[25]);
     		},
     		l: function claim(nodes) {
@@ -4070,7 +4196,7 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
-    			mount_component(tool0, div0, null);
+    			mount_component(tool, div0, null);
     			append_dev(div0, t0);
     			if (if_block0) if_block0.m(div0, null);
     			append_dev(div0, t1);
@@ -4078,26 +4204,26 @@ var app = (function () {
     			append_dev(div0, t2);
     			if (if_block2) if_block2.m(div0, null);
     			append_dev(div0, t3);
-    			mount_component(tool1, div0, null);
+    			if (if_block3) if_block3.m(div0, null);
     			insert_dev(target, t4, anchor);
     			insert_dev(target, div1, anchor);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			const tool0_changes = {};
+    			const tool_changes = {};
 
     			if (dirty & /*$$scope*/ 536870912) {
-    				tool0_changes.$$scope = { dirty, ctx };
+    				tool_changes.$$scope = { dirty, ctx };
     			}
 
-    			tool0.$set(tool0_changes);
+    			tool.$set(tool_changes);
 
-    			if (/*canAddNode*/ ctx[8]) {
+    			if (/*canAddNode*/ ctx[8] && !/*canEditEdge*/ ctx[10]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     					transition_in(if_block0, 1);
     				} else {
-    					if_block0 = create_if_block_5(ctx);
+    					if_block0 = create_if_block_6(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(div0, t1);
@@ -4117,7 +4243,7 @@ var app = (function () {
     					if_block1.p(ctx, dirty);
     					transition_in(if_block1, 1);
     				} else {
-    					if_block1 = create_if_block_1$1(ctx);
+    					if_block1 = create_if_block_2(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
     					if_block1.m(div0, t2);
@@ -4137,7 +4263,7 @@ var app = (function () {
     					if_block2.p(ctx, dirty);
     					transition_in(if_block2, 1);
     				} else {
-    					if_block2 = create_if_block$9(ctx);
+    					if_block2 = create_if_block_1$1(ctx);
     					if_block2.c();
     					transition_in(if_block2, 1);
     					if_block2.m(div0, t3);
@@ -4152,13 +4278,25 @@ var app = (function () {
     				check_outros();
     			}
 
-    			const tool1_changes = {};
+    			if (!/*canEditNode*/ ctx[9] && !/*canEditEdge*/ ctx[10]) {
+    				if (if_block3) {
+    					if_block3.p(ctx, dirty);
+    					transition_in(if_block3, 1);
+    				} else {
+    					if_block3 = create_if_block$9(ctx);
+    					if_block3.c();
+    					transition_in(if_block3, 1);
+    					if_block3.m(div0, null);
+    				}
+    			} else if (if_block3) {
+    				group_outros();
 
-    			if (dirty & /*$$scope*/ 536870912) {
-    				tool1_changes.$$scope = { dirty, ctx };
+    				transition_out(if_block3, 1, 1, () => {
+    					if_block3 = null;
+    				});
+
+    				check_outros();
     			}
-
-    			tool1.$set(tool1_changes);
 
     			if (!current || dirty & /*inh*/ 2) {
     				set_style(div1, "height", /*inh*/ ctx[1] + 2 + "px");
@@ -4166,28 +4304,28 @@ var app = (function () {
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(tool0.$$.fragment, local);
+    			transition_in(tool.$$.fragment, local);
     			transition_in(if_block0);
     			transition_in(if_block1);
     			transition_in(if_block2);
-    			transition_in(tool1.$$.fragment, local);
+    			transition_in(if_block3);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(tool0.$$.fragment, local);
+    			transition_out(tool.$$.fragment, local);
     			transition_out(if_block0);
     			transition_out(if_block1);
     			transition_out(if_block2);
-    			transition_out(tool1.$$.fragment, local);
+    			transition_out(if_block3);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div0);
-    			destroy_component(tool0);
+    			destroy_component(tool);
     			if (if_block0) if_block0.d();
     			if (if_block1) if_block1.d();
     			if (if_block2) if_block2.d();
-    			destroy_component(tool1);
+    			if (if_block3) if_block3.d();
     			if (detaching) detach_dev(t4);
     			if (detaching) detach_dev(div1);
     			dispose();
