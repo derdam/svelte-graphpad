@@ -29,7 +29,7 @@ edges.on('*', function (event, properties, senderId) {
 
 // addNode({id:-1, label:"Start", color:"green"});
 addNode({id:0, label:"Hello"});
-addNode({id:2, label:"World"});
+addNode({id:2, label:"World", nodeClass:'Youtube'});
 
 //addEdge({from:-1, to:0} )
 addEdge({from:0, to:2} )
