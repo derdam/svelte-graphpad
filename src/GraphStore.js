@@ -32,4 +32,4 @@ addNode({id:0, label:"Hello"});
 addNode({id:2, label:"World", nodeClass:'Youtube'});
 
 //addEdge({from:-1, to:0} )
-addEdge({from:0, to:2} )
+addEdge({from:0, to:2, font: {align:'middle'}} )

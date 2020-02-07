@@ -4,6 +4,8 @@ let views = {
   // , Validator: {view: { shape:'image' }, props: [{image:'./contract-signing.png'}, { size:45}]}
     ,Node: { view: {shape:'ellipse'}, props:[]}
     ,Data: { view: {'shape': 'box', 'font': {'face': 'monospace', 'align': 'left'}}, props:[]}
+    ,Address: { view: {'shape': 'box', color:"#222222",  'font': {'face': 'monospace', size:10, 'align': 'left'}}, props:[]}
+    
   //  ,Youtube: {view: { shape:'image' }, props: [{image:'./example-document.jpg'}, { size:45}]}
 }
 

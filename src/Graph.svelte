@@ -133,14 +133,16 @@ let edgeChangeSignal = 0;
   let options = {
     physics:{
     enabled: true,
-    barnesHut: {
+  /*  barnesHut: {
       gravitationalConstant: -2000,
       centralGravity: 0.3,
       springLength: 95,
       springConstant: 0.04,
       damping: 0.09,
       avoidOverlap: 0.0
-    }},
+    }
+    */
+    }, 
    autoResize: true,
             height: '100%',
             width: '100%',
@@ -151,9 +153,11 @@ let edgeChangeSignal = 0;
               useBorderWithImage:false,
               interpolation:true
       },
-      color:'#0077C8' 
+      //color:'#0077C8' 
+      color: '#33333333'
     }, edges: {
-      smooth: { enabled: false}
+      color: "0077C8"
+      ,smooth: { enabled: true}
     }
   };
 
@@ -261,7 +265,7 @@ let edgeChangeSignal = 0;
 
 
      function sampleLegalDocumentNode() {
-      return {shape: 'image',   size:45, image: './contract-signing.png'}
+      return {shape: 'image',   size:45, image: './example-document.jpg'}
     }
 
     function addNewDocumentNode() {
@@ -337,7 +341,7 @@ let edgeChangeSignal = 0;
 <!-- <GraphData></GraphData> -->
 {#if canAddNode && !canEditEdge}
   <Tool title="Graph">
-   <button on:click={addNewNode}>New node</button>
+   <button on:click={addNewNode}>+ Node</button>
   {#if canDeleteNodes}
     <button on:click={deleteNodes}>Delete node{ nodesSelected > 1 ? '(s)':''}</button>
   {/if}
@@ -387,13 +391,14 @@ let edgeChangeSignal = 0;
   
 
   {#if !canEditNode && !canEditEdge} 
-    <Tool title="Data">
+   
+    <button on:click={addNewDocumentNode}>+ Document</button>
+    <button on:click={addNewSingleAccount}>+ Single account</button> 
+
+  {/if}
+ <Tool title="Data">
       <GraphData></GraphData>
     </Tool>
-    <button on:click={addNewDocumentNode}>New document</button>
-    <button on:click={addNewSingleAccount}>New Single Account</button> 
-  {/if}
-
 </div>
 <div id ="mynet" class="graph" style="height:{inh+2}px">
 </div>	
