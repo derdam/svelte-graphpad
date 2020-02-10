@@ -2310,20 +2310,20 @@ var app = (function () {
     			if (default_slot) default_slot.c();
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "placeholder", "Street");
-    			add_location(input0, file$7, 34, 4, 625);
-    			add_location(p0, file$7, 34, 1, 622);
+    			add_location(input0, file$7, 34, 4, 627);
+    			add_location(p0, file$7, 34, 1, 624);
     			attr_dev(input1, "type", "text");
     			attr_dev(input1, "placeholder", "Zip");
-    			add_location(input1, file$7, 35, 4, 708);
+    			add_location(input1, file$7, 35, 4, 710);
     			attr_dev(input2, "type", "text");
     			attr_dev(input2, "placeholder", "City");
-    			add_location(input2, file$7, 36, 1, 778);
-    			add_location(p1, file$7, 35, 1, 705);
+    			add_location(input2, file$7, 36, 1, 780);
+    			add_location(p1, file$7, 35, 1, 707);
     			attr_dev(input3, "type", "text");
     			attr_dev(input3, "placeholder", "Country");
-    			add_location(input3, file$7, 37, 4, 857);
-    			add_location(p2, file$7, 37, 1, 854);
-    			add_location(div, file$7, 33, 0, 615);
+    			add_location(input3, file$7, 37, 4, 859);
+    			add_location(p2, file$7, 37, 1, 856);
+    			add_location(div, file$7, 33, 0, 617);
 
     			dispose = [
     				listen_dev(input0, "input", /*input0_input_handler*/ ctx[3]),
@@ -2535,8 +2535,8 @@ var app = (function () {
     				
     				console.log("label", node.label);
 
-    				if (node.label === "\n") {
-    					$$invalidate(0, node.label = "🔴 Fill Address", node);
+    				if (node.label === "\n\n") {
+    					$$invalidate(0, node.label = "🔵 Fill Address", node);
     				}
     			}
     		}

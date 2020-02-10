@@ -23,8 +23,8 @@
 
       console.log("label", node.label)
 
-      if (node.label==="\n") {
-         node.label = "🔴 Fill Address"
+      if (node.label==="\n\n") {
+         node.label = "🔵 Fill Address"
       }
    }
 
