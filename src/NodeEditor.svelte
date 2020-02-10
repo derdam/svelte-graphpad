@@ -6,6 +6,8 @@
 
    $: { updateNode(node); }
 
+  
+
 </script>
 {#if node}
 <div>
