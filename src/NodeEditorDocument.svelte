@@ -63,5 +63,5 @@ function toDataURL(src, callback, outputFormat) {
       on:change={changed}
       />
     <input type=range bind:value={node.size} min=45 max=200 step=5><span>&nbsp;{node.size}</span>
-
+ <input type=range bind:value={node.mass} min=1 max=20 step=1><span>&nbsp;{node.mass}</span>
 {/if}

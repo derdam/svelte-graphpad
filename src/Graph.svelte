@@ -13,7 +13,9 @@
    import NodeEditorValidatorAccepted from './NodeEditorValidatorAccepted.svelte';
    import NodeEditorAudio from './NodeEditorAudio.svelte';
    import NodeEditorAddress from './NodeEditorAddress.svelte';
-   import NodeEditorYoutube from './NodeEditorYoutube.svelte'
+   import NodeEditorYoutube from './NodeEditorYoutube.svelte';
+   import NodeEditorPerson from './NodeEditorPerson.svelte';
+   
    import GraphData, { restore } from './GraphData.svelte';
    import Tool from './Tool.svelte';
 
@@ -27,7 +29,8 @@
      NodeEditorValidatorRejected: NodeEditorValidatorRejected,
      NodeEditorAudio:NodeEditorAudio,
      NodeEditorAddress:NodeEditorAddress,
-     NodeEditorYoutube:NodeEditorYoutube
+     NodeEditorYoutube:NodeEditorYoutube,
+     NodeEditorPerson:NodeEditorPerson
    }
 
    let selection = {nodes: [], edges: []};

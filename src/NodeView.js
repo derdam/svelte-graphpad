@@ -5,7 +5,8 @@ let views = {
     ,Node: { view: {shape:'ellipse'}, props:[]}
     ,Data: { view: {'shape': 'box', 'font': {'face': 'monospace', 'align': 'left'}}, props:[]}
     ,Address: { view: {'shape': 'box', color:"#222222",  'font': {'face': 'monospace', size:10, 'align': 'left'}}, props:[]}
-    
+    ,Person: { view: {'shape': 'box', color:"#223344",  'font': {'face': 'monospace', size:10, 'align': 'left'}}, props:[]}
+   
   //  ,Youtube: {view: { shape:'image' }, props: [{image:'./example-document.jpg'}, { size:45}]}
 }
 
