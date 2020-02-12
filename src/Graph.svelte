@@ -16,7 +16,7 @@
    import NodeEditorYoutube from './NodeEditorYoutube.svelte';
    import NodeEditorPerson from './NodeEditorPerson.svelte';
    
-   import GraphData, { restore } from './GraphData.svelte';
+   import GraphData from './GraphData.svelte';
    import Tool from './Tool.svelte';
 
 
@@ -116,7 +116,6 @@ let edgeChangeSignal = 0;
 
           })
           
-         
         } 
         
         edgeEditors = [...editors];
@@ -255,19 +254,16 @@ let edgeChangeSignal = 0;
 
     function sampleDocumentNode() {
      // return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
-     return {nodeClass:'Document'}
-    
+      return {nodeClass:'Document'}
     }
 
 
-      function sampleIdDocumentNode() {
-    return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
-    
-    
+    function sampleIdDocumentNode() {
+      return {shape: 'image', size:45, image: './Austrian_ID_card.jpg'}
     }
 
 
-     function sampleLegalDocumentNode() {
+    function sampleLegalDocumentNode() {
       return {shape: 'image',   size:45, image: './example-document.jpg'}
     }
 
@@ -400,8 +396,8 @@ let edgeChangeSignal = 0;
 
   {/if}
  <Tool title="Data">
-      <GraphData></GraphData>
+      <GraphData network={network}></GraphData>
     </Tool>
 </div>
-<div id ="mynet" class="graph" style="height:{inh+2}px">
+<div id ="mynet" class="graph" style="height:{inh+3}px">
 </div>	

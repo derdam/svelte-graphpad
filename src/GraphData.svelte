@@ -1,8 +1,10 @@
 <script>
-   
+   import * as vis from 'vis-network'
    import { graph, nodes, edges } from './GraphStore.js';
 
    export let storeName = "store";
+
+   export let network;
 
    let storeGen = 0;
    let storeKeys = [];
@@ -55,7 +57,24 @@
   }
 
   function downloadCurrent() {
-      download("GraphPad-"+storeName+".json",JSON.stringify($graph));
+
+     var pos = network.getPositions();
+
+     //alert(JSON.stringify(pos));
+     let expNodes = [...$graph.nodes];
+
+     expNodes.forEach(n=> {
+        var npos = pos[n.id];
+     
+        if (npos) {
+            n.x = npos.x;
+            n.y = npos.y;
+              // alert(JSON.stringify(npos));
+         }
+     });
+     let expGraph = { nodes: expNodes, edges: $graph.edges};
+
+      download("GraphPad-"+storeName+".json",JSON.stringify(expGraph));
    }
 
     let files = [];
