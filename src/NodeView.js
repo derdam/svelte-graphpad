@@ -1,6 +1,6 @@
 
 let views = {
-    Document: {view: { shape:'image' }, props: [{image:'./example-document.jpg'}, { size:45}]}
+    Document: {view: { shape:'image' }, props: [{image:'./unknown-doc.png'}, { size:45}]}
    
     ,Node: { view: {shape:'ellipse'}, props:[]}
     ,Data: { view: {'shape': 'box', 'font': {'face': 'monospace', 'align': 'left'}}, props:[]}
